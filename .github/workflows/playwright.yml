@@ -36,7 +36,6 @@ jobs:
         with:
           node-version: 22
 
-      # ✅ Install pnpm using the official action
       - name: 📦 Install pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -82,7 +81,6 @@ jobs:
         with:
           node-version: 22
 
-      # ✅ Install pnpm using the official action
       - name: 📦 Install pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -142,7 +140,6 @@ jobs:
         with:
           node-version: 22
 
-      # ✅ Install pnpm using the official action
       - name: 📦 Install pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -150,6 +147,13 @@ jobs:
 
       - name: 📦 Install dependencies
         run: pnpm install --frozen-lockfile
+
+      # ✅ Install Allure CLI
+      - name: 📊 Install Allure CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y allure
+          allure --version
 
       - name: 📥 Download Allure results
         uses: actions/download-artifact@v4
@@ -159,7 +163,7 @@ jobs:
           merge-multiple: true
 
       - name: 📊 Generate Allure report
-        run: pnpm run report:allure
+        run: allure generate allure-results --clean -o allure-report
 
       - name: 📤 Upload Allure report
         uses: actions/upload-artifact@v4
