@@ -41,13 +41,12 @@ jobs:
         run: npm install
 
       - name: 🌐 Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        # ✅ Use npm script for playwright
+        run: npm run install:playwright
 
       - name: 🔑 Generate auth state
-        # ✅ Use local playwright from node_modules
-        run: npx playwright test --project=chromium --grep '@smoke' --workers=1
-        env:
-          NODE_PATH: ${{ github.workspace }}/node_modules
+        # ✅ Use npm script for auth (uses local playwright)
+        run: npm run ci:auth
 
       - name: 📤 Upload auth state
         uses: actions/upload-artifact@v4
@@ -55,8 +54,6 @@ jobs:
           name: auth-state
           path: reports/auth/
           retention-days: 1
-
-
 # ==========================================
 # TEST JOB - Parallel Sharded Execution
 # ==========================================
