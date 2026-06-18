@@ -2,20 +2,29 @@
 
 A **high-standard, production-ready** test automation framework for the SauceDemo website using **Playwright** and **TypeScript**.
 
+[![Playwright Tests](https://github.com/JohnKiman1/SauceLabTestFramework/actions/workflows/playwright.yml/badge.svg)](https://github.com/JohnKiman1/SauceLabTestFramework/actions/workflows/playwright.yml)
+[![Allure Report](https://img.shields.io/badge/📊-Allure_Report-blue)](https://johnkiman1.github.io/SauceLabTestFramework/)
+[![License](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D16-brightgreen)](https://nodejs.org/)
+
 ---
 
 ## 📋 Table of Contents
 
 - [Overview](#overview)
 - [Features](#features)
+- [Live Reports](#live-reports)
 - [Project Structure](#project-structure)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Running Tests](#running-tests)
 - [Test Reports](#test-reports)
+- [CI/CD Pipeline](#cicd-pipeline)
 - [Test Categories](#test-categories)
 - [Writing Tests](#writing-tests)
+- [Configuration](#configuration)
 - [Contributing](#contributing)
+- [FAQ](#faq)
 - [Author](#author)
 
 ---
@@ -28,7 +37,8 @@ This framework automates testing for the [SauceDemo](https://www.saucedemo.com/)
 - **Session Reuse** for faster test execution
 - **Allure Reporting** for beautiful test reports
 - **Cross-browser testing** (Chrome, Firefox, WebKit)
-- **Comprehensive test coverage** (40+ tests)
+- **Comprehensive test coverage** (141+ tests)
+- **Enterprise-grade CI/CD** with GitHub Actions
 
 ---
 
@@ -39,46 +49,64 @@ This framework automates testing for the [SauceDemo](https://www.saucedemo.com/)
 | ✅ **Session Reuse** | Login once, run all tests faster (saves 50% execution time) |
 | ✅ **Page Object Model** | Clean, maintainable, and reusable code |
 | ✅ **TypeScript** | Type-safe and robust |
-| ✅ **Allure Reports** | Beautiful, detailed test reports |
-| ✅ **Parallel Testing** | Run tests faster with parallel execution |
+| ✅ **Allure Reports** | Beautiful, detailed test reports published to GitHub Pages |
+| ✅ **Parallel Testing** | Run tests faster with 3 parallel shards |
 | ✅ **Cross-Browser** | Test on Chrome, Firefox, and WebKit |
-| ✅ **40+ Tests** | Happy path, negative, edge cases, and regression |
-| ✅ **CI/CD Ready** | Easy integration with GitHub Actions, Jenkins, etc. |
+| ✅ **141+ Tests** | Comprehensive coverage across all categories |
+| ✅ **CI/CD Ready** | GitHub Actions with automatic scheduling every 10 minutes |
+| ✅ **Auto-Deployment** | Reports automatically deployed to GitHub Pages |
+
+---
+
+## 📊 Live Reports
+
+The latest test results are automatically published after each CI run:
+
+🔗 **[View Allure Report](https://johnkiman1.github.io/SauceLabTestFramework/)**
+
+| Report Type | URL |
+|-------------|-----|
+| Allure Report | https://johnkiman1.github.io/SauceLabTestFramework/ |
+| GitHub Actions | https://github.com/JohnKiman1/SauceLabTestFramework/actions |
+| Repository | https://github.com/JohnKiman1/SauceLabTestFramework |
 
 ---
 
 ## 📁 Project Structure
-SourceDemoFramework/
-├── 📂 src/
-│ ├── 📂 pages/ # Page Object Model
-│ │ ├── BasePage.ts # Base page with common methods
-│ │ ├── LoginPage.ts # Login page actions
-│ │ ├── InventoryPage.ts # Inventory page actions
-│ │ ├── CartPage.ts # Cart page actions
-│ │ └── CheckoutPage.ts # Checkout page actions
-│ ├── 📂 fixtures/ # Custom fixtures
-│ │ ├── test-data.json # Test data (users, credentials)
-│ │ └── customFixtures.ts # Custom fixtures with session reuse
-│ ├── 📂 tests/ # Test files
-│ │ ├── 📂 ui/
-│ │ │ ├── 📂 happy-path/ # Happy path tests (15 tests)
-│ │ │ ├── 📂 negative/ # Negative tests (13 tests)
-│ │ │ ├── 📂 edge-cases/ # Edge case tests (10 tests)
-│ │ │ └── 📂 regression/ # Regression tests (2 tests)
-│ │ └── global.setup.ts # Global setup (session creation)
-│ └── 📂 utils/ # Utility functions
-├── 📂 reports/ # Test reports
-│ ├── 📂 allure-results/ # Allure raw results
-│ ├── 📂 allure-report/ # Allure HTML report
-│ ├── 📂 test-results/ # Playwright test results
-│ └── 📂 auth/ # Session storage
-├── playwright.config.ts # Playwright configuration
-├── tsconfig.json # TypeScript configuration
-├── package.json # Dependencies and scripts
-├── .gitignore # Git ignore file
-└── README.md # This file
 
-text
+```
+SauceDemoFramework/
+├── 📂 src/
+│   ├── 📂 pages/                  # Page Object Model
+│   │   ├── BasePage.ts            # Base page with common methods
+│   │   ├── LoginPage.ts           # Login page actions
+│   │   ├── InventoryPage.ts       # Inventory page actions
+│   │   ├── CartPage.ts            # Cart page actions
+│   │   └── CheckoutPage.ts        # Checkout page actions
+│   ├── 📂 fixtures/               # Custom fixtures
+│   │   ├── test-data.json         # Test data (users, credentials)
+│   │   └── customFixtures.ts      # Custom fixtures with session reuse
+│   ├── 📂 tests/                  # Test files
+│   │   ├── 📂 ui/
+│   │   │   ├── 📂 happy-path/     # Happy path tests
+│   │   │   ├── 📂 negative/       # Negative tests
+│   │   │   ├── 📂 edge-cases/     # Edge case tests
+│   │   │   └── 📂 regression/     # Regression tests
+│   │   └── global.setup.ts        # Global setup (session creation)
+│   └── 📂 utils/                  # Utility functions
+├── 📂 reports/                    # Test reports
+│   ├── 📂 allure-results/         # Allure raw results
+│   ├── 📂 allure-report/          # Allure HTML report
+│   ├── 📂 test-results/           # Playwright test results
+│   └── 📂 auth/                   # Session storage
+├── 📂 .github/workflows/          # CI/CD pipelines
+│   └── playwright.yml             # Enterprise CI/CD workflow
+├── playwright.config.ts           # Playwright configuration
+├── tsconfig.json                  # TypeScript configuration
+├── package.json                   # Dependencies and scripts
+├── .gitignore                     # Git ignore file
+└── README.md                      # This file
+```
 
 ---
 
@@ -86,157 +114,219 @@ text
 
 Before you begin, ensure you have the following installed:
 
-| Tool | Version | Installation Link |
-|------|---------|-------------------|
-| Node.js | v16 or higher | [Download Node.js](https://nodejs.org/) |
-| npm | v8 or higher | Included with Node.js |
-| Git | Latest | [Download Git](https://git-scm.com/) |
+| Tool     | Version          | Installation Link |
+|----------|------------------|-------------------|
+| Node.js  | v16 or higher    | [Download Node.js](https://nodejs.org/) |
+| pnpm     | v8 or higher     | `npm install -g pnpm` |
+| Git      | Latest           | [Download Git](https://git-scm.com/) |
 
-### **Verify Installation**
+### Verify Installation
 
 ```bash
 # Check Node.js version
 node --version
-# Should output: v16.x.x or higher
 
-# Check npm version
-npm --version
-# Should output: v8.x.x or higher
+# Check pnpm version
+pnpm --version
 
 # Check Git version
 git --version
-# Should output: git version 2.x.x or higher
-🚀 Installation
-Step 1: Clone the Repository
-bash
-# Clone the repository
+```
+
+---
+
+## 🚀 Installation
+
+### Step 1: Clone the Repository
+
+```bash
 git clone https://github.com/JohnKiman1/SauceLabTestFramework.git
-
-# Navigate to the project directory
 cd SauceLabTestFramework
-Step 2: Install Dependencies
-bash
-# Install all dependencies
-npm install
-Step 3: Install Playwright Browsers
-bash
-# Download and install Playwright browsers
-npx playwright install
+```
 
-# Install specific browsers (optional)
-npx playwright install chromium
-npx playwright install firefox
-npx playwright install webkit
-Step 4: Verify Installation
-bash
-# Run a quick test to verify everything works
-npm test
-🎯 Running Tests
-Quick Start
-bash
+### Step 2: Install Dependencies
+
+```bash
+pnpm install
+```
+
+### Step 3: Install Playwright Browsers
+
+```bash
+pnpm run install:playwright
+```
+
+### Step 4: Verify Installation
+
+```bash
+pnpm run test:smoke
+```
+
+---
+
+## 🎯 Running Tests
+
+### Quick Start
+
+```bash
 # Run all tests
-npm test
+pnpm test
 
 # Run smoke tests (fastest, covers critical paths)
-npm run test:smoke
-All Test Commands
-Command	Description	When to Use
-npm test	Run all tests	Full test suite
-npm run test:smoke	Run smoke tests	Quick sanity check
-npm run test:regression	Run regression tests	Full regression suite
-npm run test:negative	Run negative tests	Test error handling
-npm run test:edge	Run edge case tests	Test boundary scenarios
-npm run test:happy	Run happy path tests	Test positive scenarios
-npm run test:ui	Run with UI mode	Debugging tests
-npm run test:headed	Run with browser visible	See what's happening
-npm run test:debug	Run in debug mode	Step through tests
-npm run test:chrome	Run only Chrome	Browser-specific testing
-npm run test:firefox	Run only Firefox	Browser-specific testing
-npm run test:webkit	Run only WebKit	Browser-specific testing
-Advanced Test Commands
-bash
+pnpm run test:smoke
+```
+
+### All Test Commands
+
+| Command                    | Description                          |
+|---------------------------|--------------------------------------|
+| `pnpm test`               | Run all tests                        |
+| `pnpm run test:smoke`     | Run smoke tests                      |
+| `pnpm run test:regression`| Run regression tests                 |
+| `pnpm run test:negative`  | Run negative tests                   |
+| `pnpm run test:edge`      | Run edge case tests                  |
+| `pnpm run test:happy`     | Run happy path tests                 |
+| `pnpm run test:ui`        | Run with UI mode                     |
+| `pnpm run test:headed`    | Run with browser visible             |
+| `pnpm run test:debug`     | Run in debug mode                    |
+| `pnpm run test:chrome`    | Run only Chrome                      |
+| `pnpm run test:firefox`   | Run only Firefox                     |
+| `pnpm run test:webkit`    | Run only WebKit                      |
+
+### Advanced Commands
+
+```bash
 # Run a specific test file
-npx playwright test src/tests/ui/happy-path/login.spec.ts
+pnpm exec playwright test src/tests/ui/happy-path/login.spec.ts
 
 # Run a specific test by name
-npx playwright test --grep "HP-001"
+pnpm exec playwright test --grep "HP-001"
 
 # Run tests with specific tag
-npx playwright test --grep "@smoke"
+pnpm exec playwright test --grep "@smoke"
 
 # Run tests with specific project
-npx playwright test --project=chromium
-
-# Run tests with specific worker count
-npx playwright test --workers=4
-
-# Run tests with video recording
-npx playwright test --video=on
-
-# Run tests with trace viewer
-npx playwright test --trace=on
+pnpm exec playwright test --project=chromium
 
 # Show trace for failed test
-npx playwright show-trace reports/ui/test-results/.../trace.zip
-📊 Test Reports
-Allure Reports (Beautiful HTML Reports)
-bash
+pnpm exec playwright show-trace reports/ui/test-results/.../trace.zip
+```
+
+---
+
+## 📊 Test Reports
+
+### Allure Reports
+
+```bash
 # Generate and open Allure report
-npm run report:allure
+pnpm run report:allure
 
 # Serve Allure report (alternative)
-npm run report:serve
-Playwright HTML Reports
-bash
-# Open Playwright HTML report
-npm run report:html
+pnpm run report:serve
+```
 
-# Or manually
-npx playwright show-report
-Where to Find Reports
-Report Type	Location
-Allure Report	reports/ui/allure-report/index.html
-Playwright HTML Report	reports/ui/html-report/index.html
-Test Results	reports/ui/test-results/
-Screenshots (on failure)	reports/ui/test-results/
-Videos (on failure)	reports/ui/test-results/
-Traces (on failure)	reports/ui/test-results/
-🏷️ Test Categories & Tags
-Available Tags
-Tag	Description	Used In
-@smoke	Critical path tests	All categories
-@regression	Full regression suite	Regression tests
-@negative	Negative test scenarios	Negative tests
-@edge	Edge cases	Edge case tests
-@happy-path	Positive test scenarios	Happy path tests
-@fast	Fast-running tests	Session reuse tests
-Test Coverage
-Category	Test Count	Tags
-Happy Path	15	@happy-path, @smoke
-Negative	13	@negative
-Edge Cases	10	@edge
-Regression	2	@regression
-Total	40	
-✍️ Writing Tests
-Example: Happy Path Test
-typescript
+### Playwright HTML Reports
+
+```bash
+# Open Playwright HTML report
+pnpm run report:html
+```
+
+### Where to Find Reports
+
+| Report Type              | Location |
+|--------------------------|----------|
+| Allure Report (Local)    | `reports/ui/allure-report/index.html` |
+| Allure Report (Live)     | https://johnkiman1.github.io/SauceLabTestFramework/ |
+| Playwright HTML Report   | `reports/ui/html-report/index.html` |
+| Test Results             | `reports/ui/test-results/` |
+
+---
+
+## 🚀 CI/CD Pipeline
+
+The framework uses GitHub Actions for continuous integration and deployment.
+
+### Pipeline Features
+
+| Feature          | Description |
+|------------------|-------------|
+| Auto-Run         | Tests run every 10 minutes |
+| On Push          | Triggers on push to main and develop |
+| On PR            | Triggers on pull requests |
+| Parallel Sharding| 3 shards for faster execution |
+| Session Reuse    | Auth state cached between runs |
+| Cross-Browser    | Chromium, Firefox, WebKit |
+| Allure Reports   | Auto-generated and deployed |
+| GitHub Pages     | Reports published automatically |
+
+### Workflow Structure
+
+```
+auth → Generate session once, cache auth state
+  ↓
+test → 3 parallel shards, run tests with cached session
+  ↓
+allure-report → Merge results, generate Allure report
+  ↓
+deploy → Deploy report to GitHub Pages (main branch only)
+  ↓
+notify → Send completion notification
+```
+
+**Access CI/CD**
+
+- **Actions**: https://github.com/JohnKiman1/SauceLabTestFramework/actions
+- **Report**: https://johnkiman1.github.io/SauceLabTestFramework/
+
+---
+
+## 🏷️ Test Categories & Tags
+
+### Available Tags
+
+| Tag            | Description                    |
+|----------------|--------------------------------|
+| `@smoke`       | Critical path tests            |
+| `@regression`  | Full regression suite          |
+| `@negative`    | Negative test scenarios        |
+| `@edge`        | Edge cases                     |
+| `@happy-path`  | Positive test scenarios        |
+| `@fast`        | Fast-running tests             |
+
+### Test Coverage
+
+| Category     | Test Count | Tags |
+|--------------|------------|------|
+| Happy Path   | 15         | `@happy-path`, `@smoke` |
+| Negative     | 13         | `@negative` |
+| Edge Cases   | 10         | `@edge` |
+| Regression   | 2          | `@regression` |
+| **Total**    | **40**     | - |
+
+---
+
+## ✍️ Writing Tests
+
+### Example: Happy Path Test
+
+```typescript
 import { test, expect } from '../../../fixtures/customFixtures';
 
 test('HP-001: Login with valid credentials @smoke', 
     async ({ loginPage, inventoryPage, testUser }) => {
     
-    // Step 1: Navigate to login page
     await loginPage.open();
-    
-    // Step 2: Login with valid credentials
     await loginPage.login(testUser.username, testUser.password);
-    
-    // Step 3: Verify successful login
     await inventoryPage.verifyPage();
     console.log('✅ Login successful!');
 });
-Example: Negative Test
-typescript
+```
+
+### Example: Negative Test
+
+```typescript
 test('NEG-001: Login with invalid credentials @negative', 
     async ({ loginPage }) => {
     
@@ -247,8 +337,11 @@ test('NEG-001: Login with invalid credentials @negative',
     expect(errorMsg).toContain('Username and password do not match');
     console.log('✅ Error message displayed correctly');
 });
-Example: Test with Session Reuse
-typescript
+```
+
+### Example: Test with Session Reuse
+
+```typescript
 test('EDGE-001: Session persists after page reload @smoke', 
     async ({ authenticatedPage }) => {
     
@@ -256,20 +349,26 @@ test('EDGE-001: Session persists after page reload @smoke',
     await expect(authenticatedPage).toHaveURL(/inventory.html/);
     console.log('✅ Session survived page reload');
 });
-🔧 Configuration
-Environment Variables
-Create a .env file in the root directory:
+```
 
-bash
-# .env
+---
+
+## 🔧 Configuration
+
+### Environment Variables
+
+Create a `.env` file:
+
+```bash
 BASE_URL=https://www.saucedemo.com
 TEST_ENV=development
 PARALLEL_WORKERS=2
 RETRY_COUNT=1
-Playwright Configuration
-The main configuration is in playwright.config.ts:
+```
 
-typescript
+### Playwright Configuration
+
+```typescript
 export default defineConfig({
   testDir: './src/tests',
   fullyParallel: false,
@@ -287,109 +386,102 @@ export default defineConfig({
     { name: 'webkit', use: { ...devices['Desktop Safari'] } },
   ],
 });
-🤝 Contributing
-Fork the repository
-
-Create your feature branch: git checkout -b feature/amazing-feature
-
-Commit your changes: git commit -m 'Add some amazing feature'
-
-Push to the branch: git push origin feature/amazing-feature
-
-Open a Pull Request
-
-Development Workflow
-bash
-# Install dependencies
-npm install
-
-# Run tests during development
-npm run test:debug
-
-# Run specific test while developing
-npx playwright test src/tests/ui/happy-path/login.spec.ts --headed
-
-# Generate report before committing
-npm run report:allure
-❓ FAQ
-Q: Why are tests running slow?
-A: Try running with --workers=4 or use session reuse tests (@fast tag).
-
-Q: How do I debug a failing test?
-A: Use npm run test:ui for interactive debugging or npm run test:headed to see the browser.
-
-Q: How do I add a new test?
-A: Create a new .spec.ts file in the appropriate category folder under src/tests/ui/.
-
-Q: How do I run tests on a specific browser?
-A: Use npm run test:chrome, npm run test:firefox, or npm run test:webkit.
-
-Q: Where are the test reports?
-A: Reports are in reports/ui/ folder. Use npm run report:allure to open.
-
-📝 License
-ISC
-
-👤 Author
-John Kimani
-
-GitHub: @JohnKiman1
-
-LinkedIn: John Kimani
-
-🙏 Acknowledgments
-Sauce Labs for the test application
-
-Playwright for the amazing testing framework
-
-Allure for beautiful test reports
-
-📊 Quick Reference Card
-bash
-# Setup
-git clone https://github.com/JohnKiman1/SauceLabTestFramework.git
-cd SauceLabTestFramework
-npm install
-npx playwright install
-
-# Test Commands
-npm test                    # All tests
-npm run test:smoke          # Smoke tests
-npm run test:regression     # Regression tests
-npm run test:negative       # Negative tests
-npm run test:edge           # Edge cases
-npm run test:happy          # Happy path tests
-
-# Reports
-npm run report:allure       # Allure report
-npm run report:html         # HTML report
-
-# Debugging
-npm run test:ui             # UI mode
-npm run test:headed         # Headed mode
-npm run test:debug          # Debug mode
-Happy Testing! 🚀
-
-text
+```
 
 ---
 
-## 📝 **Summary**
+## 🤝 Contributing
 
-This README includes:
+1. Fork the repository
+2. Create your feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add some amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
 
-1. ✅ **Table of Contents** - Easy navigation
-2. ✅ **Overview** - What the project does
-3. ✅ **Features** - Key capabilities
-4. ✅ **Project Structure** - Clear directory tree
-5. ✅ **Prerequisites** - What you need installed
-6. ✅ **Installation** - Step-by-step setup
-7. ✅ **Running Tests** - All commands with descriptions
-8. ✅ **Test Reports** - How to view reports
-9. ✅ **Test Categories** - Tags and coverage
-10. ✅ **Writing Tests** - Examples with explanations
-11. ✅ **Configuration** - Environment variables
-12. ✅ **FAQ** - Common questions
-13. ✅ **Quick Reference** - Command cheat sheet
+### Development Workflow
 
-Now you're ready to push to GitHub! 🚀
+```bash
+pnpm install
+pnpm run test:debug
+pnpm exec playwright test src/tests/ui/happy-path/login.spec.ts --headed
+pnpm run report:allure
+```
+
+---
+
+## ❓ FAQ
+
+**Q: Why are tests running slow?**  
+**A:** Try running with `--workers=4` or use session reuse tests (`@fast` tag).
+
+**Q: How do I debug a failing test?**  
+**A:** Use `pnpm run test:ui` or `pnpm run test:headed`.
+
+**Q: How do I add a new test?**  
+**A:** Create a new `.spec.ts` file in the appropriate category folder.
+
+**Q: How do I run tests on a specific browser?**  
+**A:** Use `pnpm run test:chrome`, `pnpm run test:firefox`, or `pnpm run test:webkit`.
+
+**Q: Where are the test reports?**  
+**A:** Reports are in the `reports/ui/` folder. Use `pnpm run report:allure` to open.
+
+**Q: How often does CI run?**  
+**A:** Every 10 minutes via cron schedule, plus on every push and pull request.
+
+**Q: Where can I see the live report?**  
+**A:** https://johnkiman1.github.io/SauceLabTestFramework/
+
+---
+
+## 📝 License
+
+ISC
+
+## 👤 Author
+
+**John Kimani**
+
+- GitHub: [@JohnKiman1](https://github.com/JohnKiman1)
+- LinkedIn: John Kimani
+
+## 🙏 Acknowledgments
+
+- Sauce Labs for the test application
+- Playwright for the amazing testing framework
+- Allure for beautiful test reports
+- GitHub Actions for CI/CD
+
+---
+
+## 📊 Quick Reference Card
+
+```bash
+# Setup
+git clone https://github.com/JohnKiman1/SauceLabTestFramework.git
+cd SauceLabTestFramework
+pnpm install
+pnpm run install:playwright
+
+# Test Commands
+pnpm test                    # All tests
+pnpm run test:smoke          # Smoke tests
+pnpm run test:regression     # Regression tests
+pnpm run test:negative       # Negative tests
+pnpm run test:edge           # Edge cases
+pnpm run test:happy          # Happy path tests
+
+# Reports
+pnpm run report:allure       # Allure report
+pnpm run report:html         # HTML report
+
+# Debugging
+pnpm run test:ui             # UI mode
+pnpm run test:headed         # Headed mode
+pnpm run test:debug          # Debug mode
+
+# Live Report
+# https://johnkiman1.github.io/SauceLabTestFramework/
+```
+
+**Happy Testing!** 🚀
