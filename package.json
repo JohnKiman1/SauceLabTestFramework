@@ -6,7 +6,7 @@
     "test:negative": "playwright test --grep '@negative'",
     "test:edge": "playwright test --grep '@edge'",
     "test:happy": "playwright test --grep '@happy-path'",
-    "test:ci": "playwright test --workers=1",
+    "test:ci": "npx playwright test --workers=1",
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
@@ -16,6 +16,6 @@
     "report:allure": "allure generate allure-results --clean -o allure-report && allure open allure-report",
     "report:serve": "allure serve allure-results",
     "report:html": "playwright show-report reports/ui/html-report",
-    "ci:auth": "playwright test --project=chromium --grep '@smoke' --workers=1"
+    "ci:auth": "npx playwright test --project=chromium --grep '@smoke' --workers=1"
   }
 }

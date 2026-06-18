@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ main, develop ]
   schedule:
-    - cron: "*/10 * * * *" # Every 10 minutes
+    - cron: "*/10 * * * *"
 
 permissions:
   contents: write
@@ -16,8 +16,6 @@ permissions:
 env:
   CI: true
   BASE_URL: https://www.saucedemo.com
-  # ✅ Fix for Node 20 deprecation warning - use Node 22
-  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: false
 
 jobs:
 
@@ -40,13 +38,13 @@ jobs:
           cache: npm
 
       - name: 📦 Install dependencies
-        run: npm install  # ✅ Changed from npm ci to npm install
+        run: npm install
 
       - name: 🌐 Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
       - name: 🔑 Generate auth state
-        run: npm run ci:auth
+        run: npx playwright test --project=chromium --grep '@smoke' --workers=1
 
       - name: 📤 Upload auth state
         uses: actions/upload-artifact@v4
@@ -81,7 +79,7 @@ jobs:
           cache: npm
 
       - name: 📦 Install dependencies
-        run: npm install  # ✅ Changed from npm ci to npm install
+        run: npm install
 
       - name: 🌐 Install Playwright browsers
         run: npx playwright install --with-deps chromium
@@ -136,7 +134,7 @@ jobs:
           cache: npm
 
       - name: 📦 Install dependencies
-        run: npm install  # ✅ Changed from npm ci to npm install
+        run: npm install
 
       - name: 📥 Download Allure results
         uses: actions/download-artifact@v4
@@ -146,8 +144,7 @@ jobs:
           merge-multiple: true
 
       - name: 📊 Generate Allure report
-        run: npm run report:allure
-        continue-on-error: true
+        run: npx allure generate allure-results --clean -o allure-report
 
       - name: 📤 Upload Allure report
         uses: actions/upload-artifact@v4
