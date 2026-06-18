@@ -35,18 +35,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
+          cache: pnpm
+
+      - name: 📦 Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
 
       - name: 📦 Install dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
 
       - name: 🌐 Install Playwright browsers
-        # ✅ Use npm script for playwright
-        run: npm run install:playwright
+        run: pnpm run install:playwright
 
       - name: 🔑 Generate auth state
-        # ✅ Use npm script for auth (uses local playwright)
-        run: npm run ci:auth
+        run: pnpm run ci:auth
 
       - name: 📤 Upload auth state
         uses: actions/upload-artifact@v4
@@ -54,6 +58,8 @@ jobs:
           name: auth-state
           path: reports/auth/
           retention-days: 1
+
+
 # ==========================================
 # TEST JOB - Parallel Sharded Execution
 # ==========================================
@@ -76,13 +82,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
+          cache: pnpm
+
+      - name: 📦 Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
 
       - name: 📦 Install dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
 
       - name: 🌐 Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: pnpm run install:playwright
 
       - name: 📥 Download auth state
         uses: actions/download-artifact@v4
@@ -94,11 +106,8 @@ jobs:
         run: mkdir -p allure-results
 
       - name: 🧪 Run tests (Shard ${{ matrix.shard }}/${{ strategy.job-total }})
-        # ✅ Use local playwright from node_modules
-        run: npx playwright test --shard=${{ matrix.shard }}/${{ strategy.job-total }} --workers=1
+        run: pnpm run test:ci -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
         continue-on-error: true
-        env:
-          NODE_PATH: ${{ github.workspace }}/node_modules
 
       - name: 📤 Upload Allure Results
         if: always()
@@ -134,10 +143,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
+          cache: pnpm
+
+      - name: 📦 Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
 
       - name: 📦 Install dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
 
       - name: 📥 Download Allure results
         uses: actions/download-artifact@v4
@@ -147,10 +162,7 @@ jobs:
           merge-multiple: true
 
       - name: 📊 Generate Allure report
-        # ✅ Use npx for allure
-        run: npx allure generate allure-results --clean -o allure-report
-        env:
-          NODE_PATH: ${{ github.workspace }}/node_modules
+        run: pnpm run report:allure
 
       - name: 📤 Upload Allure report
         uses: actions/upload-artifact@v4
