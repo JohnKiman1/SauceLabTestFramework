@@ -261,6 +261,31 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
+      # ✅ Show the URL in the workflow log
+      - name: 📊 Display Report URL
+        run: |
+          echo "=========================================="
+          echo "✅ Allure Report Deployed Successfully!"
+          echo "📊 View Report: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          echo "=========================================="
+
+      # ✅ Add URL to GitHub Actions Summary
+      - name: 📝 Create Summary
+        run: |
+          echo "# 🚀 Allure Report Deployed Successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 View Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Click the link below to view the Allure test report:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 **[https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/)**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### ✅ Deployment Details" >> $GITHUB_STEP_SUMMARY
+          echo "- **Repository:** ${{ github.repository }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status:** ✅ Deployed" >> $GITHUB_STEP_SUMMARY
+          echo "- **URL:** https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/" >> $GITHUB_STEP_SUMMARY
+
 
 # ==========================================
 # NOTIFICATION
@@ -274,6 +299,8 @@ jobs:
     steps:
       - name: 📊 Check test status
         run: |
+          echo "=========================================="
           echo "✅ Tests completed!"
           echo "📊 Allure Report: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
           echo "🔗 GitHub Actions: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo "=========================================="
