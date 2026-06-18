@@ -18,10 +18,10 @@
     "test:firefox": "pnpm exec playwright test --project=firefox",
     "test:webkit": "pnpm exec playwright test --project=webkit",
     "report:allure": "allure generate reports/ui/allure-results --clean -o allure-report",
-    "report:serve": "allure serve allure-results",
+    "report:serve": "allure serve reports/ui/allure-results",
     "report:html": "pnpm exec playwright show-report reports/ui/html-report",
     "ci:auth": "pnpm exec playwright test --project=chromium --grep '@smoke' --workers=1",
-    "install:playwright": "pnpm exec playwright install chromium --with-deps && pnpm exec playwright install firefox webkit --no-deps"
+    "install:playwright": "pnpm exec playwright install chromium --with-deps && pnpm exec playwright install firefox webkit --without-deps"
   },
   "keywords": [],
   "author": "",
