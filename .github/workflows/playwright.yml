@@ -186,7 +186,6 @@ jobs:
         with:
           version: 9
 
-      # ✅ Cache pnpm dependencies
       - name: 💾 Cache pnpm store
         uses: actions/cache@v4
         with:
@@ -200,11 +199,18 @@ jobs:
       - name: 📦 Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # ✅ Install Allure CLI
+      # ✅ Cache Allure installation
+      - name: 💾 Cache Allure
+        id: cache-allure
+        uses: actions/cache@v4
+        with:
+          path: /opt/allure-2.29.0
+          key: ${{ runner.os }}-allure-2.29.0
+
+      # ✅ Install Allure using npm (simplest and most reliable)
       - name: 📊 Install Allure CLI
         run: |
-          sudo apt-get update
-          sudo apt-get install -y allure
+          npm install -g allure-commandline
           allure --version
 
       - name: 📥 Download Allure results
