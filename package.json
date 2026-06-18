@@ -21,7 +21,7 @@
     "report:serve": "allure serve reports/ui/allure-results",
     "report:html": "pnpm exec playwright show-report reports/ui/html-report",
     "ci:auth": "pnpm exec playwright test --project=chromium --grep '@smoke' --workers=1",
-    "install:playwright": "pnpm exec playwright install chromium --with-deps && pnpm exec playwright install firefox webkit --without-deps"
+    "install:playwright": "pnpm exec playwright install chromium --with-deps"
   },
   "keywords": [],
   "author": "",
