@@ -6,15 +6,16 @@
     "test:negative": "playwright test --grep '@negative'",
     "test:edge": "playwright test --grep '@edge'",
     "test:happy": "playwright test --grep '@happy-path'",
+    "test:ci": "playwright test --workers=1",
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
-    "test:project": "playwright test --project=",
     "test:chrome": "playwright test --project=chromium",
     "test:firefox": "playwright test --project=firefox",
     "test:webkit": "playwright test --project=webkit",
-    "report:allure": "allure generate reports/ui/allure-results --clean -o reports/ui/allure-report && allure open reports/ui/allure-report",
-    "report:serve": "allure serve reports/ui/allure-results",
-    "report:html": "playwright show-report reports/ui/html-report"
+    "report:allure": "allure generate allure-results --clean -o allure-report && allure open allure-report",
+    "report:serve": "allure serve allure-results",
+    "report:html": "playwright show-report reports/ui/html-report",
+    "ci:auth": "playwright test --project=chromium --grep '@smoke' --workers=1"
   }
 }

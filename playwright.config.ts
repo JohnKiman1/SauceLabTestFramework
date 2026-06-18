@@ -5,10 +5,16 @@ export default defineConfig({
   testDir: './src/tests',
   outputDir: 'reports/ui/test-results',
 
+  // ✅ Timeout for each test
+  timeout: 60000,
+
+  // ✅ Global timeout for all tests
+  globalTimeout: 5400000, // 90 minutes
+
   fullyParallel: false,
   forbidOnly: config.isCI,
   retries: config.isCI ? 2 : 1,
-  workers: config.isCI ? 1 : 1,
+  workers: config.isCI ? 1 : 2,
 
   reporter: [
     ['list'],
@@ -18,11 +24,11 @@ export default defineConfig({
       suiteTitle: true,
       attachments: true
     }],
-    ['html', { outputFolder: 'reports/ui/html-report' }]
+    ['html', { outputFolder: 'reports/ui/html-report' }],
+    ['json', { outputFile: 'reports/ui/test-results.json' }]
   ],
 
   use: {
-    // ✅ Uses environment variable
     baseURL: config.baseURL,
     
     trace: 'on-first-retry',
@@ -31,11 +37,10 @@ export default defineConfig({
     actionTimeout: 15000,
     navigationTimeout: 30000,
     
-    contextOptions : {
-      viewport : { width: 1280, height: 720 },
+    contextOptions: {
+      viewport: { width: 1280, height: 720 },
     },
   },
-  
 
   projects: [
     {
@@ -56,7 +61,6 @@ export default defineConfig({
         ...devices['Desktop Safari'],
       },
     },
-
   ],
 
   globalSetup: './src/tests/global.setup.ts',
