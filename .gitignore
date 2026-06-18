@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+package-lock.json
+pnpm-lock.yaml
+
+# Test results
+reports/
+test-results/
+playwright-report/
+allure-results/
+allure-report/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build files
+dist/
+build/
+*.tsbuildinfo
+
+# Screenshots
+screenshots/
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Auth files (contains session data)
+reports/auth/
+
+# Temporary files
+tmp/
+temp/
