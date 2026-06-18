@@ -7,7 +7,7 @@ on:
   push:
     branches: [ main, develop ]
   schedule:
-    - cron: "*/10 * * * *"  # ✅ Every 10 minutes
+    - cron: "0 * * * *"  # ✅ Every 10 minutes
 
 permissions:
   contents: write
