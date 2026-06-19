@@ -241,8 +241,9 @@ jobs:
     name: 🚀 Deploy Report to GitHub Pages
     runs-on: ubuntu-latest
     needs: allure-report
-    # ✅ Deploy from BOTH main AND develop branches
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    # ✅ ONLY deploy from main branch (GitHub Pages is configured for main)
+    # ✅ Also skip if it's a PR from a fork (SECURITY)
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
 
     steps:
       - name: 📥 Download Allure report
