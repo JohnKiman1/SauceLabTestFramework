@@ -1,4 +1,5 @@
-import { test, expect } from '../../../fixtures/customFixtures';
+import { test, expect } from '../../fixtures/customFixtures';
+import testData from '../../fixtures/test-data.json';
 
 test.describe('Happy Path - Inventory', () => {
     
@@ -12,13 +13,14 @@ test.describe('Happy Path - Inventory', () => {
         async ({ inventoryPage }) => {
         
         const count = await inventoryPage.getItemCount();
-        expect(count).toBe(6);
+        expect(count).toBe(testData.products.groups.all_items.length);
         console.log(`✅ Displayed ${count} items`);
     });
 
     test('HP-005: Sort items by Name (A-Z) @smoke', 
         async ({ inventoryPage }) => {
         
+        // ✅ Use type assertion or directly use string literal
         await inventoryPage.sortItems('az');
         const names = await inventoryPage.getItemNames();
         const sorted = [...names].sort();

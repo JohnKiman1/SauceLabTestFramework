@@ -1,5 +1,5 @@
-import { test, expect } from '../../../fixtures/customFixtures';
-import testData from '../../../fixtures/test-data.json';
+import { test, expect } from '../../fixtures/customFixtures';
+import testData from '../../fixtures/test-data.json';
 
 test.describe('Happy Path - Login', () => {
     
