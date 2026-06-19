@@ -1,5 +1,6 @@
 import { test, expect } from '../../../fixtures/customFixtures';
 import { CartPage } from '../../../pages/CartPage';
+import testData from '../../../fixtures/test-data.json';
 
 test.describe('Negative - Cart', () => {
     
@@ -18,11 +19,10 @@ test.describe('Negative - Cart', () => {
         console.log('✅ Cart is empty - no items to remove');
     });
 
-    // ✅ FIXED: NEG-008 - Add duplicate item to cart
     test('NEG-008: Add duplicate item to cart', 
         async ({ page, inventoryPage }) => {
         
-        const itemName = 'Sauce Labs Backpack';
+        const itemName = testData.products.single.backpack;
         console.log(`🔄 Testing duplicate prevention for "${itemName}"...`);
         
         // Step 1: Add item to cart
@@ -37,7 +37,7 @@ test.describe('Negative - Cart', () => {
         // Step 3: Verify the button changed to "Remove"
         const item = page.locator(`[data-test="inventory-item"]:has-text("${itemName}")`);
         const removeButton = item.locator('button:has-text("Remove")');
-        await expect(removeButton).toBeVisible({ timeout: 5000 });
+        await expect(removeButton).toBeVisible({ timeout: testData.timeouts.medium });
         console.log('✅ Button changed to "Remove"');
         
         // Step 4: Try to click "Add to cart" again (should not exist)

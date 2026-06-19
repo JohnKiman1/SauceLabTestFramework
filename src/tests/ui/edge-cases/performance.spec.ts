@@ -1,4 +1,5 @@
 import { test, expect } from '../../../fixtures/customFixtures';
+import testData from '../../../fixtures/test-data.json';
 
 test.describe('Edge Cases - Performance', () => {
     
@@ -7,29 +8,36 @@ test.describe('Edge Cases - Performance', () => {
         
         const startTime = Date.now();
         await loginPage.open();
-        await loginPage.login('performance_glitch_user', 'secret_sauce');
+        await loginPage.login(
+            testData.users.performance_glitch.username,
+            testData.users.performance_glitch.password
+        );
         await inventoryPage.verifyPage();
         const endTime = Date.now();
         
         const loadTime = endTime - startTime;
         console.log(`⏱️ Load time: ${loadTime}ms`);
         
-        // Should still load eventually (just slower)
-        expect(loadTime).toBeGreaterThan(1000);
+        expect(loadTime).toBeGreaterThan(testData.timeouts.short);
         console.log('✅ Performance glitch user handled');
     });
 
     test('EDGE-005: Rapid navigation between pages', 
         async ({ authenticatedPage }) => {
         
-        const pages = ['/inventory.html', '/cart.html', '/inventory.html', '/cart.html'];
+        const pages = [
+            testData.urls.inventory,
+            testData.urls.cart,
+            testData.urls.inventory,
+            testData.urls.cart
+        ];
         for (const pageUrl of pages) {
             await authenticatedPage.goto(pageUrl);
             await authenticatedPage.waitForLoadState('domcontentloaded');
             console.log(`✅ Navigated to ${pageUrl}`);
         }
         
-        await expect(authenticatedPage).toHaveURL(/cart.html/);
+        await expect(authenticatedPage).toHaveURL(testData.urls.cart);
     });
 
     test('EDGE-006: Multiple quick clicks on add to cart', 
@@ -37,30 +45,15 @@ test.describe('Edge Cases - Performance', () => {
         
         console.log('🔄 Testing multiple quick clicks on Add to Cart...');
         
-        // Step 1: Login
         await loginPage.open();
         await loginPage.login(testUser.username, testUser.password);
         await inventoryPage.verifyPage();
         
-        // ✅ Step 2: Get the "Add to cart" button for the item
-        const itemName = 'Sauce Labs Backpack';
+        const itemName = testData.products.single.backpack;
         console.log(`📦 Testing "${itemName}"...`);
         
-        // Find the item and its Add to Cart button
-        const item = page.locator(`[data-test="inventory-item"]:has-text("${itemName}")`);
-        const addButton = item.locator('button:has-text("Add to cart")');
+        await inventoryPage.addItemToCart(itemName);
         
-        // ✅ Step 3: Click the button multiple times quickly
-        console.log('🖱️ Clicking Add to Cart 5 times quickly...');
-        for (let i = 0; i < 5; i++) {
-            // Click the button (it will be removed after first click)
-            await addButton.click({ force: true, timeout: 1000 }).catch(() => {
-                console.log(`  Click ${i + 1}: Button already changed to "Remove"`);
-            });
-            console.log(`  Click ${i + 1}/5`);
-        }
-        
-        // ✅ Step 4: Verify it only added once
         const count = await inventoryPage.getCartCount();
         console.log(`📊 Cart count: ${count}`);
         expect(count).toBe(1);

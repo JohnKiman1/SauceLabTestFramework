@@ -4,6 +4,10 @@
       "username": "standard_user",
       "password": "secret_sauce"
     },
+    "performance_glitch": {
+      "username": "performance_glitch_user",
+      "password": "secret_sauce"
+    },
     "locked": {
       "username": "locked_out_user",
       "password": "secret_sauce"
@@ -11,14 +15,90 @@
     "problem": {
       "username": "problem_user",
       "password": "secret_sauce"
-    },
-    "performance_glitch": {
-      "username": "performance_glitch_user",
-      "password": "secret_sauce"
     }
   },
   "invalidUser": {
     "username": "invalid_user",
     "password": "wrong_password"
+  },
+  "products": {
+    "single": {
+      "backpack": "Sauce Labs Backpack",
+      "bike_light": "Sauce Labs Bike Light",
+      "bolt_tshirt": "Sauce Labs Bolt T-Shirt",
+      "fleece_jacket": "Sauce Labs Fleece Jacket",
+      "onesie": "Sauce Labs Onesie",
+      "tshirt_red": "Test.allTheThings() T-Shirt (Red)"
+    },
+    "groups": {
+      "multiple_items": [
+        "Sauce Labs Backpack",
+        "Sauce Labs Bike Light",
+        "Sauce Labs Bolt T-Shirt"
+      ],
+      "all_items": [
+        "Sauce Labs Backpack",
+        "Sauce Labs Bike Light",
+        "Sauce Labs Bolt T-Shirt",
+        "Sauce Labs Fleece Jacket",
+        "Sauce Labs Onesie",
+        "Test.allTheThings() T-Shirt (Red)"
+      ]
+    }
+  },
+  "checkout": {
+    "valid": {
+      "first_name": "John",
+      "last_name": "Doe",
+      "postal_code": "12345"
+    },
+    "valid2": {
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "postal_code": "67890"
+    }
+  },
+  "urls": {
+    "base": "https://www.saucedemo.com",
+    "inventory": "/inventory.html",
+    "cart": "/cart.html",
+    "checkout_step_one": "/checkout-step-one.html",
+    "checkout_step_two": "/checkout-step-two.html",
+    "checkout_complete": "/checkout-complete.html"
+  },
+  "timeouts": {
+    "short": 5000,
+    "medium": 10000,
+    "long": 30000
+  },
+  "viewport": {
+    "mobile": { "width": 375, "height": 812 },
+    "tablet": { "width": 768, "height": 1024 },
+    "desktop": { "width": 1280, "height": 720 }
+  },
+  "messages": {
+    "error": {
+      "invalid_credentials": "Username and password do not match",
+      "locked_out": "locked out",
+      "username_required": "Username is required",
+      "password_required": "Password is required",
+      "first_name_required": "First Name is required",
+      "last_name_required": "Last Name is required",
+      "postal_code_required": "Postal Code is required"
+    },
+    "success": {
+      "checkout_complete": "Thank you for your order!"
+    }
+  },
+  "sortOptions": {
+    "az": "az",
+    "za": "za",
+    "lohi": "lohi",
+    "hilo": "hilo"
+  },
+  "browsers": {
+    "chromium": "chromium",
+    "firefox": "firefox",
+    "webkit": "webkit"
   }
 }

@@ -12,17 +12,16 @@ export class BasePage {
 
     /**
      * Wait for the page to load
-     * ✅ FIXED: Don't use networkidle - use domcontentloaded instead
      */
     async waitForLoad() {
-        // ✅ Changed from 'networkidle' to 'domcontentloaded' to avoid timeout
+        // Wait for the page to load
         await this.page.waitForLoadState('domcontentloaded');
         // Small wait to ensure dynamic content loads
         await this.page.waitForTimeout(500);
     }
 
     /**
-     * Take a screenshot (useful for debugging)
+     * Take a screenshot of the current page
      */
     async takeScreenshot(name: string) {
         await this.page.screenshot({

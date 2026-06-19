@@ -1,5 +1,5 @@
 {
-  "name": "sourcedemoframework",
+  "name": "sourceDemoFramework",
   "version": "1.0.0",
   "description": "Simple but enhanced test automation framework",
   "main": "index.js",
@@ -21,7 +21,7 @@
     "report:serve": "allure serve reports/ui/allure-results",
     "report:html": "pnpm exec playwright show-report reports/ui/html-report",
     "ci:auth": "pnpm exec playwright test --project=chromium --grep '@smoke' --workers=1",
-    "install:playwright": "pnpm exec playwright install chromium --with-deps && pnpm exec playwright install firefox webkit"
+    "install:playwright": "pnpm exec playwright install chromium --with-deps && pnpm exec playwright install firefox && pnpm exec playwright install webkit --with-deps"
   },
   "keywords": [],
   "author": "",

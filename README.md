@@ -11,6 +11,8 @@ A **high-standard, production-ready** test automation framework for the SauceDem
 
 ## 📋 Table of Contents
 
+## 📋 Table of Contents
+
 - [Overview](#overview)
 - [Features](#features)
 - [Live Reports](#live-reports)
@@ -26,8 +28,8 @@ A **high-standard, production-ready** test automation framework for the SauceDem
 - [Contributing](#contributing)
 - [FAQ](#faq)
 - [Author](#author)
-
----
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
 
 ## 📖 Overview
 
@@ -65,10 +67,10 @@ The latest test results are automatically published after each CI run:
 🔗 **[View Allure Report](https://johnkiman1.github.io/SauceLabTestFramework/)**
 
 | Report Type | URL |
-|-------------|-----|
-| Allure Report | https://johnkiman1.github.io/SauceLabTestFramework/ |
-| GitHub Actions | https://github.com/JohnKiman1/SauceLabTestFramework/actions |
-| Repository | https://github.com/JohnKiman1/SauceLabTestFramework |
+| ----------- | --- |
+| Allure Report | [Allure Report](https://johnkiman1.github.io/SauceLabTestFramework/) |
+| GitHub Actions | [Actions](https://github.com/JohnKiman1/SauceLabTestFramework/actions) |
+| Repository | [Repository](https://github.com/JohnKiman1/SauceLabTestFramework) |
 
 ---
 
@@ -178,20 +180,20 @@ pnpm run test:smoke
 
 ### All Test Commands
 
-| Command                    | Description                          |
-|---------------------------|--------------------------------------|
-| `pnpm test`               | Run all tests                        |
-| `pnpm run test:smoke`     | Run smoke tests                      |
-| `pnpm run test:regression`| Run regression tests                 |
-| `pnpm run test:negative`  | Run negative tests                   |
-| `pnpm run test:edge`      | Run edge case tests                  |
-| `pnpm run test:happy`     | Run happy path tests                 |
-| `pnpm run test:ui`        | Run with UI mode                     |
-| `pnpm run test:headed`    | Run with browser visible             |
-| `pnpm run test:debug`     | Run in debug mode                    |
-| `pnpm run test:chrome`    | Run only Chrome                      |
-| `pnpm run test:firefox`   | Run only Firefox                     |
-| `pnpm run test:webkit`    | Run only WebKit                      |
+| Command | Description |
+| ------- | ----------- |
+| `pnpm test` | Run all tests |
+| `pnpm run test:smoke` | Run smoke tests |
+| `pnpm run test:regression` | Run regression tests |
+| `pnpm run test:negative` | Run negative tests |
+| `pnpm run test:edge` | Run edge case tests |
+| `pnpm run test:happy` | Run happy path tests |
+| `pnpm run test:ui` | Run with UI mode |
+| `pnpm run test:headed` | Run with browser visible |
+| `pnpm run test:debug` | Run in debug mode |
+| `pnpm run test:chrome` | Run only Chrome |
+| `pnpm run test:firefox` | Run only Firefox |
+| `pnpm run test:webkit` | Run only WebKit |
 
 ### Advanced Commands
 
@@ -235,12 +237,12 @@ pnpm run report:html
 
 ### Where to Find Reports
 
-| Report Type              | Location |
-|--------------------------|----------|
-| Allure Report (Local)    | `reports/ui/allure-report/index.html` |
-| Allure Report (Live)     | https://johnkiman1.github.io/SauceLabTestFramework/ |
-| Playwright HTML Report   | `reports/ui/html-report/index.html` |
-| Test Results             | `reports/ui/test-results/` |
+| Report Type | Location |
+| ------------ | -------- |
+| Allure Report (Local) | `reports/ui/allure-report/index.html` |
+| Allure Report (Live) | [https://johnkiman1.github.io/SauceLabTestFramework/](https://johnkiman1.github.io/SauceLabTestFramework/) |
+| Playwright HTML Report | `reports/ui/html-report/index.html` |
+| Test Results | `reports/ui/test-results/` |
 
 ---
 
@@ -250,16 +252,16 @@ The framework uses GitHub Actions for continuous integration and deployment.
 
 ### Pipeline Features
 
-| Feature          | Description |
-|------------------|-------------|
-| Auto-Run         | Tests run every 10 minutes |
-| On Push          | Triggers on push to main and develop |
-| On PR            | Triggers on pull requests |
-| Parallel Sharding| 3 shards for faster execution |
-| Session Reuse    | Auth state cached between runs |
-| Cross-Browser    | Chromium, Firefox, WebKit |
-| Allure Reports   | Auto-generated and deployed |
-| GitHub Pages     | Reports published automatically |
+| Feature | Description |
+| ------- | ----------- |
+| Auto-Run | Tests run every 10 minutes |
+| On Push | Triggers on push to main and develop |
+| On PR | Triggers on pull requests |
+| Parallel Sharding | 3 shards for faster execution |
+| Session Reuse | Auth state cached between runs |
+| Cross-Browser | Chromium, Firefox, WebKit |
+| Allure Reports | Auto-generated and deployed |
+| GitHub Pages | Reports published automatically |
 
 ### Workflow Structure
 
@@ -297,13 +299,13 @@ notify → Send completion notification
 
 ### Test Coverage
 
-| Category     | Test Count | Tags |
-|--------------|------------|------|
-| Happy Path   | 15         | `@happy-path`, `@smoke` |
-| Negative     | 13         | `@negative` |
-| Edge Cases   | 10         | `@edge` |
-| Regression   | 2          | `@regression` |
-| **Total**    | **40**     | - |
+| Test Category | Count | Tags |
+| ------------- | ----- | ---- |
+| Happy Path | 15 | `@happy-path`, `@smoke` |
+| Negative | 13 | `@negative` |
+| Edge Cases | 10 | `@edge` |
+| Regression | 2 | `@regression` |
+| **Total** | **40** | - |
 
 ---
 

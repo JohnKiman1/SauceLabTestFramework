@@ -59,7 +59,7 @@ export class CheckoutPage extends BasePage {
         return this.page.locator('[data-test="total-label"]');
     }
     
-    // ✅ FIXED: Error message selector matches the actual HTML
+    // Get error message
     private get errorMessage() {
         return this.page.locator('[data-test="error"]');
     }
@@ -85,7 +85,7 @@ export class CheckoutPage extends BasePage {
         await this.postalCodeInput.fill(postalCode);
     }
 
-    // ✅ FIXED: Continue checkout with proper validation handling
+    // Continue checkout
     async continueCheckout(expectSuccess: boolean = true) {
         await this.continueButton.click();
         
@@ -148,7 +148,7 @@ export class CheckoutPage extends BasePage {
         return await this.totalLabel.textContent() || '';
     }
 
-    // ✅ FIXED: Get error message
+    // Get error message
     async getErrorMessage(): Promise<string> {
         try {
             await this.errorMessage.waitFor({ state: 'visible', timeout: 5000 });
@@ -200,7 +200,7 @@ export class CheckoutPage extends BasePage {
         console.log(`✅ "${itemName}" found in checkout`);
     }
 
-    // ✅ FIXED: Verify error message
+     //Verify error message
     async verifyError(expectedError: string) {
         const error = await this.getErrorMessage();
         console.log(`📊 Error message: "${error}"`);

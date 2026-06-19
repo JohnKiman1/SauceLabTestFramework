@@ -1,6 +1,7 @@
 import { test, expect } from '../../../fixtures/customFixtures';
 import { CartPage } from '../../../pages/CartPage';
 import { CheckoutPage } from '../../../pages/CheckoutPage';
+import testData from '../../../fixtures/test-data.json';
 
 test.describe('Negative - Checkout', () => {
     
@@ -8,7 +9,7 @@ test.describe('Negative - Checkout', () => {
         await loginPage.open();
         await loginPage.login(testUser.username, testUser.password);
         await inventoryPage.verifyPage();
-        await inventoryPage.addItemToCart('Sauce Labs Backpack');
+        await inventoryPage.addItemToCart(testData.products.single.backpack);
         await inventoryPage.goToCart();
     });
 
@@ -22,15 +23,13 @@ test.describe('Negative - Checkout', () => {
         console.log('✅ Navigated to checkout');
         
         const checkoutPage = new CheckoutPage(page);
-        await checkoutPage.fillCheckoutInfo('', 'Doe', '12345');
+        await checkoutPage.fillCheckoutInfo('', testData.checkout.valid.last_name, testData.checkout.valid.postal_code);
         console.log('✅ Filled checkout info (missing first name)');
         
-        // ✅ FIXED: Expect validation error
         await checkoutPage.continueCheckout(false);
         console.log('✅ Continue clicked - validation error expected');
         
-        // ✅ Verify error message
-        await checkoutPage.verifyError('First Name is required');
+        await checkoutPage.verifyError(testData.messages.error.first_name_required);
         console.log('✅ First name validation works');
     });
 
@@ -44,14 +43,13 @@ test.describe('Negative - Checkout', () => {
         console.log('✅ Navigated to checkout');
         
         const checkoutPage = new CheckoutPage(page);
-        await checkoutPage.fillCheckoutInfo('John', '', '12345');
+        await checkoutPage.fillCheckoutInfo(testData.checkout.valid.first_name, '', testData.checkout.valid.postal_code);
         console.log('✅ Filled checkout info (missing last name)');
         
-        // ✅ FIXED: Expect validation error
         await checkoutPage.continueCheckout(false);
         console.log('✅ Continue clicked - validation error expected');
         
-        await checkoutPage.verifyError('Last Name is required');
+        await checkoutPage.verifyError(testData.messages.error.last_name_required);
         console.log('✅ Last name validation works');
     });
 
@@ -65,14 +63,13 @@ test.describe('Negative - Checkout', () => {
         console.log('✅ Navigated to checkout');
         
         const checkoutPage = new CheckoutPage(page);
-        await checkoutPage.fillCheckoutInfo('John', 'Doe', '');
+        await checkoutPage.fillCheckoutInfo(testData.checkout.valid.first_name, testData.checkout.valid.last_name, '');
         console.log('✅ Filled checkout info (missing postal code)');
         
-        // ✅ FIXED: Expect validation error
         await checkoutPage.continueCheckout(false);
         console.log('✅ Continue clicked - validation error expected');
         
-        await checkoutPage.verifyError('Postal Code is required');
+        await checkoutPage.verifyError(testData.messages.error.postal_code_required);
         console.log('✅ Postal code validation works');
     });
 
@@ -89,11 +86,10 @@ test.describe('Negative - Checkout', () => {
         await checkoutPage.fillCheckoutInfo('', '', '');
         console.log('✅ Filled checkout info (all fields empty)');
         
-        // ✅ FIXED: Expect validation error
         await checkoutPage.continueCheckout(false);
         console.log('✅ Continue clicked - validation error expected');
         
-        await checkoutPage.verifyError('First Name is required');
+        await checkoutPage.verifyError(testData.messages.error.first_name_required);
         console.log('✅ Empty fields validation works');
     });
 
@@ -111,7 +107,7 @@ test.describe('Negative - Checkout', () => {
         console.log('✅ Cancelled checkout');
         
         // Should go back to cart
-        await expect(page).toHaveURL(/cart.html/);
+        await expect(page).toHaveURL(testData.urls.cart);
         console.log('✅ Checkout cancelled successfully - returned to cart');
     });
 });

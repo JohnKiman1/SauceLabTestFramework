@@ -3,7 +3,7 @@ import config from './src/utils/config';
 
 export default defineConfig({
   testDir: './src/tests',
-  outputDir: 'reports/ui/test-results',  // ✅ Test results go here
+  outputDir: 'reports/ui/test-results', 
 
   timeout: 60000,
   globalTimeout: 5400000,
@@ -16,13 +16,13 @@ export default defineConfig({
   reporter: [
     ['list'],
     ['allure-playwright', {
-      resultsDir: 'reports/ui/allure-results',  // ✅ Allure results here
+      resultsDir: 'reports/ui/allure-results',
       detail: true,
       suiteTitle: true,
       attachments: true,
     }],
-    ['html', { outputFolder: 'reports/ui/html-report' }],  // ✅ HTML report here
-    ['json', { outputFile: 'reports/ui/test-results.json' }]  // ✅ JSON report here
+    ['html', { outputFolder: 'reports/ui/html-report' }],  
+    ['json', { outputFile: 'reports/ui/test-results.json' }]  
   ],
 
   use: {

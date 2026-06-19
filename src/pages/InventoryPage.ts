@@ -77,7 +77,7 @@ export class InventoryPage extends BasePage {
         return names;
     }
 
-    // ✅ NEW: Get item prices as numbers
+    // Get item prices as numbers
     async getItemPrices(): Promise<number[]> {
         const prices = await this.inventoryItemPrices.allTextContents();
         return prices.map(p => parseFloat(p.replace('$', '')));
