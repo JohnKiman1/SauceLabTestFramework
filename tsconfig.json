@@ -15,12 +15,12 @@
     "rootDir": "./src",
     "baseUrl": "./src",
     "paths": {
-      "@fixtures/*": ["fixtures/*"],
-      "@pages/*": ["pages/*"],
+      "@fixtures/*": ["ui/fixtures/*"],
+      "@pages/*": ["ui/pages/*"],
       "@utils/*": ["utils/*"],
-      "@tests/*": ["tests/*"]
+      "@tests/*": ["ui/tests/*"]
     }
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist", "reports"]
+  "include": ["src/ui/**/*.ts", "src/utils/**/*.ts"],
+  "exclude": ["node_modules", "dist", "reports", "src/load/**/*"]
 }

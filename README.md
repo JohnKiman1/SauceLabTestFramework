@@ -447,44 +447,52 @@ test('EDGE-001: Session persists after page reload @smoke',
 });
 ```
 
-### 🏋️ Load Testing
+## 🏋️ Load Testing (K6)
 
 ### Test Types
 
 | Test Type | Users | Duration | Purpose |
-| ------------- | ----- | ---- | ------- |
-| Smoke Test | 1-5 | 1 min | Quick sanity check |
-| Load Test | 50-100 | 8 min | Expected traffic simulation |
-| Stress Test | 200-500 | 12 min | Find breaking point |
-| Spike Test | 0→200→0 | 5 min | Sudden traffic surges |
-| Endurance Test | 20-50 | 1 hour | Long-term stability |
-
----
-
-### Performance Goals
-
-| Metric | Goal |
-| ------------- | ----- |
-| Response Time (95th) | < 2 seconds |
-| Error Rate | < 5% |
-| Checkout Success Rate | > 95% |
-| Login Duration (95th) | < 3 seconds |
-
----
+| ----------- | ------- | ---------- | --------- |
+| **Smoke Test** | 1-5 | 1 min | Quick sanity check |
+| **Load Test** | 50-100 | 8 min | Expected traffic simulation |
+| **Stress Test** | 200-500 | 12 min | Find breaking point |
+| **Spike Test** | 0→200→0 | 5 min | Sudden traffic surges |
+| **Endurance Test** | 20-30 | 1 hour | Long-term stability |
 
 ### Running Load Tests
 
 ```bash
+# Run smoke test
+npm run test:load:smoke
+
+# Run load test
+npm run test:load:load
+
+# Run stress test
+npm run test:load:stress
+
+# Run spike test
+npm run test:load:spike
+
+# Run endurance test
+npm run test:load:endurance
+
 # Run all load tests
-pnpm run test:load:smoke && pnpm run test:load:load && pnpm run test:load:stress
+npm run test:load:all
 
-# Run with specific users
-k6 run src/load/scenarios/load-test.ts --vus 100 --duration 3m
-
-# Generate load test report
-pnpm run test:load:report
+# Generate reports
+npm run test:load:report
 
 ```
+
+### Performance Goals
+
+| Metric | Goal |
+| ---------------- | ------------------------ |
+| Response Time (95th) | < 2 seconds |
+| Error Rate | < 5% |
+| Checkout Success Rate | > 95% |
+| Login Duration (95th) | < 3 seconds |
 
 ### Example Load Test Script
 
