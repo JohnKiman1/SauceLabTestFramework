@@ -1,25 +1,22 @@
 import { test, expect } from '../../../fixtures/customFixtures';
+import testData from '../../../fixtures/test-data.json';
 
 test.describe('Edge Cases - Session', () => {
     
-     //Use regular login instead of authenticatedPage
     test('EDGE-001: Session persists after page reload @smoke', 
         async ({ page, loginPage, inventoryPage, testUser }) => {
         
         console.log('🔄 Testing session persistence after page reload...');
         
-        // Login
         await loginPage.open();
         await loginPage.login(testUser.username, testUser.password);
         await inventoryPage.verifyPage();
         console.log('✅ Logged in successfully');
         
-        // ✅ Reload the page
         await page.reload();
         console.log('🔄 Page reloaded');
         
-        // ✅ Verify we're still on inventory page
-        await expect(page).toHaveURL(/inventory.html/);
+        await expect(page).toHaveURL(testData.urls.inventory);
         await expect(page.locator('[data-test="inventory-container"]')).toBeVisible();
         console.log('✅ Session survived page reload');
     });
@@ -29,20 +26,17 @@ test.describe('Edge Cases - Session', () => {
         
         console.log('🔄 Testing session persistence after navigation...');
         
-        // Login
         await loginPage.open();
         await loginPage.login(testUser.username, testUser.password);
         await inventoryPage.verifyPage();
         console.log('✅ Logged in successfully');
         
-        // Navigate to cart
-        await page.goto('/cart.html');
-        await expect(page).toHaveURL(/cart.html/);
+        await page.goto(testData.urls.cart);
+        await expect(page).toHaveURL(testData.urls.cart);
         console.log('✅ Navigated to cart');
         
-        // Navigate back to inventory
-        await page.goto('/inventory.html');
-        await expect(page).toHaveURL(/inventory.html/);
+        await page.goto(testData.urls.inventory);
+        await expect(page).toHaveURL(testData.urls.inventory);
         await expect(page.locator('[data-test="inventory-container"]')).toBeVisible();
         console.log('✅ Session survived navigation');
     });
@@ -56,22 +50,20 @@ test.describe('Edge Cases - Session', () => {
         
         console.log('🔄 Attempting to logout...');
         
-        // Click the menu button with force
         await page.click('[data-test="open-menu"]', { force: true });
         console.log('✅ Menu opened');
         
-        // Wait for the logout link
-        await page.waitForSelector('[data-test="logout-sidebar-link"]', { state: 'visible' });
+        await page.waitForSelector('[data-test="logout-sidebar-link"]', { 
+            state: 'visible',
+            timeout: testData.timeouts.medium
+        });
         
-        // Click logout
         await page.click('[data-test="logout-sidebar-link"]');
         console.log('✅ Logout clicked');
         
-        // Wait for navigation
-        await page.waitForURL(/saucedemo.com/, { timeout: 10000 });
+        await page.waitForURL(testData.urls.base, { timeout: testData.timeouts.medium });
         
-        // Should be on login page
-        await expect(page).toHaveURL(/saucedemo.com/);
+        await expect(page).toHaveURL(testData.urls.base);
         await expect(page.locator('[data-test="username"]')).toBeVisible();
         console.log('✅ Logout successful - session cleared');
     });

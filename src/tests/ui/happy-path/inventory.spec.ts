@@ -1,4 +1,5 @@
 import { test, expect } from '../../../fixtures/customFixtures';
+import testData from '../../../fixtures/test-data.json';
 
 test.describe('Happy Path - Inventory', () => {
     
@@ -12,13 +13,14 @@ test.describe('Happy Path - Inventory', () => {
         async ({ inventoryPage }) => {
         
         const count = await inventoryPage.getItemCount();
-        expect(count).toBe(6);
+        expect(count).toBe(testData.products.groups.all_items.length);
         console.log(`✅ Displayed ${count} items`);
     });
 
     test('HP-005: Sort items by Name (A-Z) @smoke', 
         async ({ inventoryPage }) => {
         
+        // ✅ Use type assertion or directly use string literal
         await inventoryPage.sortItems('az');
         const names = await inventoryPage.getItemNames();
         const sorted = [...names].sort();
@@ -37,10 +39,9 @@ test.describe('Happy Path - Inventory', () => {
     });
 
     test('HP-007: Sort items by Price (Low to High)', 
-        async ({ page, inventoryPage }) => {  // ← Add 'page' here
+        async ({ page, inventoryPage }) => {
         
         await inventoryPage.sortItems('lohi');
-        // ✅ Use 'page' from test context
         const prices = await page.locator('[data-test="inventory-item-price"]').allTextContents();
         const priceValues = prices.map(p => parseFloat(p.replace('$', '')));
         const sorted = [...priceValues].sort((a, b) => a - b);
@@ -49,10 +50,9 @@ test.describe('Happy Path - Inventory', () => {
     });
 
     test('HP-008: Sort items by Price (High to Low)', 
-        async ({ page, inventoryPage }) => {  // ← Add 'page' here
+        async ({ page, inventoryPage }) => {
         
         await inventoryPage.sortItems('hilo');
-        // ✅ Use 'page' from test context
         const prices = await page.locator('[data-test="inventory-item-price"]').allTextContents();
         const priceValues = prices.map(p => parseFloat(p.replace('$', '')));
         const sorted = [...priceValues].sort((a, b) => b - a);
@@ -61,17 +61,13 @@ test.describe('Happy Path - Inventory', () => {
     });
 
     test('HP-009: View product details', 
-        async ({ page, inventoryPage }) => {  // ← Add 'page' here
+        async ({ page, inventoryPage }) => {
         
-        // Get first item name
         const names = await inventoryPage.getItemNames();
         expect(names.length).toBeGreaterThan(0);
         const name = names[0];
         
-        // Click on the item
         await inventoryPage.clickItemByName(name);
-        
-         //Use 'page' from test context
         await expect(page).toHaveURL(/inventory-item.html/);
         console.log(`✅ Viewed details for: ${name}`);
     });

@@ -1,5 +1,5 @@
-// ✅ Correct import for tests in src/tests/ui/negative/
 import { test, expect } from '../../../fixtures/customFixtures';
+import testData from '../../../fixtures/test-data.json';
 
 test.describe('Negative - Login', () => {
     
@@ -7,10 +7,13 @@ test.describe('Negative - Login', () => {
         async ({ loginPage }) => {
         
         await loginPage.open();
-        await loginPage.login('invalid_user', 'wrong_password');
+        await loginPage.login(
+            testData.invalidUser.username,
+            testData.invalidUser.password
+        );
         
         const errorMsg = await loginPage.getErrorMessage();
-        expect(errorMsg).toContain('Username and password do not match');
+        expect(errorMsg).toContain(testData.messages.error.invalid_credentials);
         console.log('✅ Invalid login error displayed');
     });
 
@@ -18,10 +21,10 @@ test.describe('Negative - Login', () => {
         async ({ loginPage }) => {
         
         await loginPage.open();
-        await loginPage.login('', 'secret_sauce');
+        await loginPage.login('', testData.users.standard.password);
         
         const errorMsg = await loginPage.getErrorMessage();
-        expect(errorMsg).toContain('Username is required');
+        expect(errorMsg).toContain(testData.messages.error.username_required);
         console.log('✅ Empty username error displayed');
     });
 
@@ -29,10 +32,10 @@ test.describe('Negative - Login', () => {
         async ({ loginPage }) => {
         
         await loginPage.open();
-        await loginPage.login('standard_user', '');
+        await loginPage.login(testData.users.standard.username, '');
         
         const errorMsg = await loginPage.getErrorMessage();
-        expect(errorMsg).toContain('Password is required');
+        expect(errorMsg).toContain(testData.messages.error.password_required);
         console.log('✅ Empty password error displayed');
     });
 
@@ -43,7 +46,7 @@ test.describe('Negative - Login', () => {
         await loginPage.login('', '');
         
         const errorMsg = await loginPage.getErrorMessage();
-        expect(errorMsg).toContain('Username is required');
+        expect(errorMsg).toContain(testData.messages.error.username_required);
         console.log('✅ Empty credentials error displayed');
     });
 
@@ -51,10 +54,13 @@ test.describe('Negative - Login', () => {
         async ({ loginPage }) => {
         
         await loginPage.open();
-        await loginPage.login('locked_out_user', 'secret_sauce');
+        await loginPage.login(
+            testData.users.locked.username,
+            testData.users.locked.password
+        );
         
         const errorMsg = await loginPage.getErrorMessage();
-        expect(errorMsg).toContain('locked out');
+        expect(errorMsg).toContain(testData.messages.error.locked_out);
         console.log('✅ Locked out user error displayed');
     });
 
@@ -64,7 +70,10 @@ test.describe('Negative - Login', () => {
         await loginPage.open();
         
         // First attempt - invalid credentials
-        await loginPage.login('invalid', 'invalid');
+        await loginPage.login(
+            testData.invalidUser.username,
+            testData.invalidUser.password
+        );
         
         // Verify error is displayed
         const isErrorDisplayed = await loginPage.isErrorDisplayed();
@@ -74,9 +83,12 @@ test.describe('Negative - Login', () => {
         // Clear and try again with valid credentials
         await loginPage.clearUsername();
         await loginPage.clearPassword();
-        await loginPage.login('standard_user', 'secret_sauce');
+        await loginPage.login(
+            testData.users.standard.username,
+            testData.users.standard.password
+        );
         
-         //Use the helper method instead of accessing page directly
+        // Wait for navigation to inventory
         await loginPage.waitForLoginComplete();
         
         // Error should be gone

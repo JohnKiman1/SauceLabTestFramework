@@ -1,117 +1,102 @@
 import { test, expect } from '../../../fixtures/customFixtures';
 import { CartPage } from '../../../pages/CartPage';
 import { CheckoutPage } from '../../../pages/CheckoutPage';
+import testData from '../../../fixtures/test-data.json';
 
-test.describe('Negative - Checkout', () => {
+test.describe('Happy Path - Checkout', () => {
     
-    test.beforeEach(async ({ page, loginPage, inventoryPage, testUser }) => {
+    test.beforeEach(async ({ loginPage, inventoryPage, testUser }) => {
         await loginPage.open();
         await loginPage.login(testUser.username, testUser.password);
         await inventoryPage.verifyPage();
-        await inventoryPage.addItemToCart('Sauce Labs Backpack');
+    });
+
+    test('HP-014: Complete checkout flow @smoke', 
+        async ({ page, inventoryPage }) => {
+        
+        console.log('🛒 Testing complete checkout flow...');
+        
+        // Step 1: Add item to cart
+        await inventoryPage.addItemToCart(testData.products.single.backpack);
         await inventoryPage.goToCart();
-    });
-
-    test('NEG-009: Checkout with missing first name', 
-        async ({ page }) => {
+        console.log('✅ Item added to cart');
         
-        console.log('🔄 Testing checkout with missing first name...');
-        
+        // Step 2: Proceed to checkout
         const cartPage = new CartPage(page);
         await cartPage.proceedToCheckout();
-        console.log('✅ Navigated to checkout');
+        console.log('✅ Proceeded to checkout');
         
+        // Step 3: Fill checkout info
         const checkoutPage = new CheckoutPage(page);
-        await checkoutPage.fillCheckoutInfo('', 'Doe', '12345');
-        console.log('✅ Filled checkout info (missing first name)');
+        await checkoutPage.fillCheckoutInfo(
+            testData.checkout.valid.first_name,
+            testData.checkout.valid.last_name,
+            testData.checkout.valid.postal_code
+        );
+        await checkoutPage.continueCheckout();
+        console.log('✅ Checkout info filled');
         
-         //Expect validation error (not success)
-        await checkoutPage.continueCheckout(false);
-        console.log('✅ Continue clicked - validation error expected');
+        // Step 4: Verify overview
+        await checkoutPage.verifyCheckoutOverview();
+        await checkoutPage.verifyItemsExist();
+        console.log('✅ Overview verified');
         
-        // ✅ Verify error message
-        await checkoutPage.verifyError('First Name is required');
-        console.log('✅ First name validation works');
+        // Step 5: Finish checkout
+        await checkoutPage.finishCheckout();
+        await checkoutPage.verifyCheckoutComplete();
+        console.log('✅ Checkout completed');
+        
+        // Step 6: Verify success message
+        const header = await checkoutPage.getCompleteHeader();
+        expect(header).toContain(testData.messages.success.checkout_complete);
+        console.log('✅ Checkout completed successfully');
     });
 
-    test('NEG-010: Checkout with missing last name', 
-        async ({ page }) => {
+    test('HP-015: Checkout with empty cart', 
+        async ({ page, inventoryPage }) => {
         
-        console.log('🔄 Testing checkout with missing last name...');
+        console.log('🛒 Testing checkout with empty cart...');
         
+        // Step 1: Go to cart directly (should be empty)
+        await inventoryPage.goToCart();
         const cartPage = new CartPage(page);
+        await cartPage.verifyCartPage();
+        
+        // Step 2: Verify cart is empty
+        const count = await cartPage.getCartItemCount();
+        console.log(`📊 Cart has ${count} items`);
+        expect(count).toBe(0);
+        console.log('✅ Cart is empty');
+        
+        // Step 3: Proceed to checkout with empty cart
         await cartPage.proceedToCheckout();
-        console.log('✅ Navigated to checkout');
+        console.log('✅ Proceeded to checkout with empty cart');
         
+        // Step 4: Fill checkout info
         const checkoutPage = new CheckoutPage(page);
-        await checkoutPage.fillCheckoutInfo('John', '', '12345');
-        console.log('✅ Filled checkout info (missing last name)');
+        await checkoutPage.fillCheckoutInfo(
+            testData.checkout.valid.first_name,
+            testData.checkout.valid.last_name,
+            testData.checkout.valid.postal_code
+        );
+        await checkoutPage.continueCheckout();
+        console.log('✅ Checkout info filled');
         
-         //Expect validation error
-        await checkoutPage.continueCheckout(false);
-        console.log('✅ Continue clicked - validation error expected');
+        // Step 5: Verify overview page
+        await checkoutPage.verifyCheckoutOverview();
         
-        await checkoutPage.verifyError('Last Name is required');
-        console.log('✅ Last name validation works');
-    });
-
-    test('NEG-011: Checkout with missing postal code', 
-        async ({ page }) => {
+        // Step 6: Verify no items in checkout
+        const itemCount = await checkoutPage.getItemCount();
+        console.log(`📊 Checkout overview has ${itemCount} items`);
+        expect(itemCount).toBe(0);
+        console.log('✅ Empty cart checkout works');
         
-        console.log('🔄 Testing checkout with missing postal code...');
+        // Step 7: Finish checkout
+        await checkoutPage.finishCheckout();
+        await checkoutPage.verifyCheckoutComplete();
         
-        const cartPage = new CartPage(page);
-        await cartPage.proceedToCheckout();
-        console.log('✅ Navigated to checkout');
-        
-        const checkoutPage = new CheckoutPage(page);
-        await checkoutPage.fillCheckoutInfo('John', 'Doe', '');
-        console.log('✅ Filled checkout info (missing postal code)');
-        
-         //Expect validation error
-        await checkoutPage.continueCheckout(false);
-        console.log('✅ Continue clicked - validation error expected');
-        
-        await checkoutPage.verifyError('Postal Code is required');
-        console.log('✅ Postal code validation works');
-    });
-
-    test('NEG-012: Checkout with all fields empty', 
-        async ({ page }) => {
-        
-        console.log('🔄 Testing checkout with all fields empty...');
-        
-        const cartPage = new CartPage(page);
-        await cartPage.proceedToCheckout();
-        console.log('✅ Navigated to checkout');
-        
-        const checkoutPage = new CheckoutPage(page);
-        await checkoutPage.fillCheckoutInfo('', '', '');
-        console.log('✅ Filled checkout info (all fields empty)');
-        
-         //Expect validation error
-        await checkoutPage.continueCheckout(false);
-        console.log('✅ Continue clicked - validation error expected');
-        
-        await checkoutPage.verifyError('First Name is required');
-        console.log('✅ Empty fields validation works');
-    });
-
-    test('NEG-013: Cancel checkout', 
-        async ({ page }) => {
-        
-        console.log('🔄 Testing cancel checkout...');
-        
-        const cartPage = new CartPage(page);
-        await cartPage.proceedToCheckout();
-        console.log('✅ Navigated to checkout');
-        
-        const checkoutPage = new CheckoutPage(page);
-        await checkoutPage.cancelCheckout();
-        console.log('✅ Cancelled checkout');
-        
-        // Should go back to cart
-        await expect(page).toHaveURL(/cart.html/);
-        console.log('✅ Checkout cancelled successfully - returned to cart');
+        const header = await checkoutPage.getCompleteHeader();
+        expect(header).toContain(testData.messages.success.checkout_complete);
+        console.log('✅ Empty cart checkout completed successfully');
     });
 });

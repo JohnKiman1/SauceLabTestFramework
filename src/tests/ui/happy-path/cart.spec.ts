@@ -1,5 +1,6 @@
 import { test, expect } from '../../../fixtures/customFixtures';
 import { CartPage } from '../../../pages/CartPage';
+import testData from '../../../fixtures/test-data.json';
 
 test.describe('Happy Path - Cart', () => {
     
@@ -12,7 +13,7 @@ test.describe('Happy Path - Cart', () => {
     test('HP-010: Add item to cart @smoke', 
         async ({ page, inventoryPage }) => {
         
-        await inventoryPage.addItemToCart('Sauce Labs Backpack');
+        await inventoryPage.addItemToCart(testData.products.single.backpack);
         const cartCount = await inventoryPage.getCartCount();
         expect(cartCount).toBe(1);
         console.log(`✅ Cart has ${cartCount} item`);
@@ -21,34 +22,33 @@ test.describe('Happy Path - Cart', () => {
     test('HP-011: Add multiple items to cart @smoke', 
         async ({ page, inventoryPage }) => {
         
-        const items = ['Sauce Labs Backpack', 'Sauce Labs Bike Light', 'Sauce Labs Bolt T-Shirt'];
+        const items = testData.products.groups.multiple_items;
         for (const item of items) {
             await inventoryPage.addItemToCart(item);
         }
         
         const cartCount = await inventoryPage.getCartCount();
-        expect(cartCount).toBe(3);
+        expect(cartCount).toBe(items.length);
         console.log(`✅ Cart has ${cartCount} items`);
     });
 
     test('HP-012: Remove item from cart', 
         async ({ page, inventoryPage }) => {
         
-        await inventoryPage.addItemToCart('Sauce Labs Backpack');
-        await inventoryPage.removeItemFromCart('Sauce Labs Backpack');
+        await inventoryPage.addItemToCart(testData.products.single.backpack);
+        await inventoryPage.removeItemFromCart(testData.products.single.backpack);
         
         const cartCount = await inventoryPage.getCartCount();
         expect(cartCount).toBe(0);
         console.log('✅ Item removed from cart');
     });
 
-     //HP-013 - Navigate to cart with better assertions
     test('HP-013: Navigate to cart', 
         async ({ page, inventoryPage }) => {
         
         console.log('🛒 Testing navigation to cart...');
         
-        const itemName = 'Sauce Labs Backpack';
+        const itemName = testData.products.single.backpack;
         
         // Step 1: Add item to cart
         await inventoryPage.addItemToCart(itemName);
@@ -68,12 +68,12 @@ test.describe('Happy Path - Cart', () => {
         
         // Step 5: Wait for cart page to load
         await page.waitForLoadState('domcontentloaded');
-        await page.waitForTimeout(500);
+        await page.waitForTimeout(testData.timeouts.short);
         
         // Step 6: Verify cart page
         await cartPage.verifyCartPage();
         
-        // Step 7: Verify cart has items - using the FIXED selector
+        // Step 7: Verify cart has items
         await cartPage.verifyCartHasItems(1);
         console.log('✅ Cart has 1 item');
         

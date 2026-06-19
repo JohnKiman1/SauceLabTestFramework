@@ -1,17 +1,16 @@
- //Correct import path - go up 3 levels
 import { test, expect } from '../../../fixtures/customFixtures';
+import testData from '../../../fixtures/test-data.json';
 
 test.describe('Edge Cases - UI', () => {
     
     test('EDGE-007: Responsive - Mobile viewport', 
         async ({ page, loginPage, inventoryPage, testUser }) => {
-        
-        await page.setViewportSize({ width: 375, height: 812 });
+ 
+        await page.setViewportSize(testData.viewport.mobile);
         await loginPage.open();
         await loginPage.login(testUser.username, testUser.password);
         await inventoryPage.verifyPage();
         
-         //Use 'page' from test context instead of inventoryPage.page
         const isVisible = await page.locator('[data-test="inventory-container"]').isVisible();
         expect(isVisible).toBe(true);
         console.log('✅ Mobile viewport works');
@@ -19,13 +18,12 @@ test.describe('Edge Cases - UI', () => {
 
     test('EDGE-008: Responsive - Tablet viewport', 
         async ({ page, loginPage, inventoryPage, testUser }) => {
-        
-        await page.setViewportSize({ width: 768, height: 1024 });
+ 
+        await page.setViewportSize(testData.viewport.tablet);
         await loginPage.open();
         await loginPage.login(testUser.username, testUser.password);
         await inventoryPage.verifyPage();
         
-         //Use 'page' from test context instead of inventoryPage.page
         const isVisible = await page.locator('[data-test="inventory-container"]').isVisible();
         expect(isVisible).toBe(true);
         console.log('✅ Tablet viewport works');
@@ -36,11 +34,9 @@ test.describe('Edge Cases - UI', () => {
         
         await loginPage.open();
         
-        // Tab to username field
         await page.keyboard.press('Tab');
         await expect(page.locator('[data-test="username"]')).toBeFocused();
         
-        // Tab to password field
         await page.keyboard.press('Tab');
         await expect(page.locator('[data-test="password"]')).toBeFocused();
         
@@ -52,7 +48,6 @@ test.describe('Edge Cases - UI', () => {
         
         await loginPage.open();
         
-        // Check aria labels
         const usernameLabel = await page.locator('[data-test="username"]').getAttribute('placeholder');
         expect(usernameLabel).toBe('Username');
         
