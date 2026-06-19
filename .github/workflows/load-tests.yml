@@ -1,9 +1,13 @@
 name: Load Tests (K6)
 
 on:
+  pull_request:
+    branches: [ main ]
+    types: [ opened, synchronize, reopened ]
+  push:
+    branches: [ main, develop ]
   schedule:
-    - cron: "0 2 * * *"  # Daily at 2 AM
-  workflow_dispatch:  # Manual trigger
+    - cron: "0 0 * * 1"  # ✅ Every Monday at 12:00 AM UTC (same as Playwright)
 
 permissions:
   contents: write
@@ -70,7 +74,9 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## 📊 Reports" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Smoke Test: Passed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Smoke Test: Completed" >> $GITHUB_STEP_SUMMARY
           echo "✅ Load Test: Completed" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "📁 **Download reports:** https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📊 **View HTML report:** Download artifacts and open \`reports/load/html/report.html\`" >> $GITHUB_STEP_SUMMARY
