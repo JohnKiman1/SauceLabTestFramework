@@ -7,7 +7,6 @@ export class CartPage extends BasePage {
     }
 
     // SELECTORS
-    // ✅ FIXED: Cart items use data-test="inventory-item" on cart page
     private get cartItems() {
         return this.page.locator('[data-test="inventory-item"]');
     }
@@ -47,7 +46,7 @@ export class CartPage extends BasePage {
         await expect(this.checkoutButton).toBeVisible({ timeout: 10000 });
     }
 
-    // ✅ FIXED: Get cart item count using the correct selector
+    //Get cart item count
     async getCartItemCount(): Promise<number> {
         try {
             // Wait for cart items to be visible
@@ -63,28 +62,28 @@ export class CartPage extends BasePage {
         }
     }
 
-    // ✅ NEW: Get cart item quantities
+    // Get cart item quantities
     async getCartItemQuantities(): Promise<string[]> {
         return await this.cartItemQuantities.allTextContents();
     }
 
-    // ✅ NEW: Get cart item names
+    // Get cart item names
     async getCartItemNames(): Promise<string[]> {
         return await this.cartItemNames.allTextContents();
     }
 
-    // ✅ NEW: Get cart item prices
+    // Get cart item descriptions
     async getCartItemPrices(): Promise<string[]> {
         return await this.cartItemPrices.allTextContents();
     }
 
-    // ✅ NEW: Check if specific item exists in cart
+    // Get cart item descriptions
     async isItemInCart(itemName: string): Promise<boolean> {
         const names = await this.getCartItemNames();
         return names.some(name => name.includes(itemName));
     }
 
-    // ✅ NEW: Verify specific item is in cart
+    // Verify item is in cart
     async verifyItemInCart(itemName: string) {
         const isInCart = await this.isItemInCart(itemName);
         expect(isInCart).toBe(true);
@@ -109,7 +108,7 @@ export class CartPage extends BasePage {
         await expect(this.page).toHaveURL(/inventory.html/, { timeout: 10000 });
     }
 
-    // ✅ FIXED: Remove item by name
+    // Remove item
     async removeItem(itemName: string) {
         // The remove button has data-test like "remove-sauce-labs-backpack"
         const removeId = `remove-${itemName.toLowerCase().replace(/ /g, '-')}`;
@@ -117,14 +116,14 @@ export class CartPage extends BasePage {
         await removeButton.click();
     }
 
-    // VERIFICATIONS
+    // Verify cart page
     async verifyCartPage() {
         await expect(this.page).toHaveURL(/cart.html/);
         await expect(this.checkoutButton).toBeVisible({ timeout: 10000 });
         console.log('✅ Cart page verified');
     }
 
-    // ✅ FIXED: Verify cart has expected number of items
+    // Verify cart has items
     async verifyCartHasItems(expectedCount: number) {
         // Wait a moment for items to render
         await this.page.waitForTimeout(500);
@@ -136,7 +135,7 @@ export class CartPage extends BasePage {
         expect(count).toBe(expectedCount);
     }
 
-    // ✅ NEW: Verify cart has specific item with quantity
+    // Verify cart item
     async verifyCartItem(itemName: string, expectedQuantity: number = 1) {
         // Check if item exists
         const isInCart = await this.isItemInCart(itemName);

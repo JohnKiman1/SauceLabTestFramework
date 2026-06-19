@@ -2,7 +2,7 @@ import { test, expect } from '../../../fixtures/customFixtures';
 
 test.describe('Edge Cases - Session', () => {
     
-    // ✅ FIXED: Use regular login instead of authenticatedPage
+     //Use regular login instead of authenticatedPage
     test('EDGE-001: Session persists after page reload @smoke', 
         async ({ page, loginPage, inventoryPage, testUser }) => {
         

@@ -1,4 +1,4 @@
-// ✅ FIXED: Correct import path - go up 3 levels
+ //Correct import path - go up 3 levels
 import { test, expect } from '../../../fixtures/customFixtures';
 
 test.describe('Edge Cases - UI', () => {
@@ -11,7 +11,7 @@ test.describe('Edge Cases - UI', () => {
         await loginPage.login(testUser.username, testUser.password);
         await inventoryPage.verifyPage();
         
-        // ✅ FIXED: Use 'page' from test context instead of inventoryPage.page
+         //Use 'page' from test context instead of inventoryPage.page
         const isVisible = await page.locator('[data-test="inventory-container"]').isVisible();
         expect(isVisible).toBe(true);
         console.log('✅ Mobile viewport works');
@@ -25,7 +25,7 @@ test.describe('Edge Cases - UI', () => {
         await loginPage.login(testUser.username, testUser.password);
         await inventoryPage.verifyPage();
         
-        // ✅ FIXED: Use 'page' from test context instead of inventoryPage.page
+         //Use 'page' from test context instead of inventoryPage.page
         const isVisible = await page.locator('[data-test="inventory-container"]').isVisible();
         expect(isVisible).toBe(true);
         console.log('✅ Tablet viewport works');

@@ -33,7 +33,7 @@ export const test = base.extend<CustomFixtures>({
         });
     },
 
-    // ✅ Better: Create a reusable authenticated context
+    //Create a reusable authenticated context
     authenticatedContext: async ({ browser }, use) => {
         const storagePath = 'reports/auth/storage-state.json';
         const baseURL = 'https://www.saucedemo.com';
@@ -65,7 +65,7 @@ export const test = base.extend<CustomFixtures>({
         await context.close();
     },
 
-    // 🔥 FIXED: Uses the authenticated context
+    // Use the authenticated context
     authenticatedPage: async ({ authenticatedContext }, use) => {
         // Create a single page from the authenticated context
         const page = await authenticatedContext.newPage();

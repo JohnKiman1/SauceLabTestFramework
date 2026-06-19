@@ -91,13 +91,13 @@ export class LoginPage extends BasePage {
         return await this.loginButton.isEnabled();
     }
 
-        // ✅ NEW: Wait for login to complete
+         //Wait for login to complete
     async waitForLoginComplete() {
         await this.page.waitForURL(/inventory.html/, { timeout: 5000 });
         console.log('✅ Navigation to inventory complete');
     }
 
-    // ✅ NEW: Wait for specific URL pattern
+     //Wait for specific URL pattern
     async waitForURL(pattern: string | RegExp, timeout: number = 5000) {
         await this.page.waitForURL(pattern, { timeout });
     }

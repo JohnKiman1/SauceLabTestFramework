@@ -18,7 +18,7 @@ test.describe('Negative - Cart', () => {
         console.log('✅ Cart is empty - no items to remove');
     });
 
-    // ✅ FIXED: NEG-008 - Add duplicate item to cart
+     //NEG-008 - Add duplicate item to cart
     test('NEG-008: Add duplicate item to cart', 
         async ({ page, inventoryPage }) => {
         

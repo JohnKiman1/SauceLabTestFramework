@@ -29,7 +29,7 @@ async function globalSetup(config: FullConfig) {
         
         const loginPage = new LoginPage(page);
         
-        // ✅ FIXED: Use full URL directly
+         //Use full URL directly
         await page.goto('https://www.saucedemo.com/');
         
         // Login

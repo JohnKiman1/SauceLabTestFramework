@@ -42,7 +42,7 @@ test.describe('Happy Path - Cart', () => {
         console.log('✅ Item removed from cart');
     });
 
-    // ✅ FIXED: HP-013 - Navigate to cart with better assertions
+     //HP-013 - Navigate to cart with better assertions
     test('HP-013: Navigate to cart', 
         async ({ page, inventoryPage }) => {
         

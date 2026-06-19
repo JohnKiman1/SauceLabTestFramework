@@ -71,7 +71,7 @@ test.describe('Happy Path - Inventory', () => {
         // Click on the item
         await inventoryPage.clickItemByName(name);
         
-        // ✅ FIXED: Use 'page' from test context
+         //Use 'page' from test context
         await expect(page).toHaveURL(/inventory-item.html/);
         console.log(`✅ Viewed details for: ${name}`);
     });

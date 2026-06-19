@@ -76,7 +76,7 @@ test.describe('Negative - Login', () => {
         await loginPage.clearPassword();
         await loginPage.login('standard_user', 'secret_sauce');
         
-        // ✅ FIXED: Use the helper method instead of accessing page directly
+         //Use the helper method instead of accessing page directly
         await loginPage.waitForLoginComplete();
         
         // Error should be gone

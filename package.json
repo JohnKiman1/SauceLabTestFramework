@@ -1,5 +1,5 @@
 {
-  "name": "sourcedemoframework",
+  "name": "sourceDemoFramework",
   "version": "1.0.0",
   "description": "Simple but enhanced test automation framework",
   "main": "index.js",

@@ -25,7 +25,7 @@ test.describe('Negative - Checkout', () => {
         await checkoutPage.fillCheckoutInfo('', 'Doe', '12345');
         console.log('✅ Filled checkout info (missing first name)');
         
-        // ✅ FIXED: Expect validation error (not success)
+         //Expect validation error (not success)
         await checkoutPage.continueCheckout(false);
         console.log('✅ Continue clicked - validation error expected');
         
@@ -47,7 +47,7 @@ test.describe('Negative - Checkout', () => {
         await checkoutPage.fillCheckoutInfo('John', '', '12345');
         console.log('✅ Filled checkout info (missing last name)');
         
-        // ✅ FIXED: Expect validation error
+         //Expect validation error
         await checkoutPage.continueCheckout(false);
         console.log('✅ Continue clicked - validation error expected');
         
@@ -68,7 +68,7 @@ test.describe('Negative - Checkout', () => {
         await checkoutPage.fillCheckoutInfo('John', 'Doe', '');
         console.log('✅ Filled checkout info (missing postal code)');
         
-        // ✅ FIXED: Expect validation error
+         //Expect validation error
         await checkoutPage.continueCheckout(false);
         console.log('✅ Continue clicked - validation error expected');
         
@@ -89,7 +89,7 @@ test.describe('Negative - Checkout', () => {
         await checkoutPage.fillCheckoutInfo('', '', '');
         console.log('✅ Filled checkout info (all fields empty)');
         
-        // ✅ FIXED: Expect validation error
+         //Expect validation error
         await checkoutPage.continueCheckout(false);
         console.log('✅ Continue clicked - validation error expected');
         
