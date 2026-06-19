@@ -2,8 +2,10 @@ import { defineConfig, devices } from '@playwright/test';
 import config from './src/utils/config';
 
 export default defineConfig({
-  testDir: './src/tests',
-  outputDir: 'reports/ui/test-results', 
+  // ✅ Updated test directory
+  testDir: './src/ui/tests',
+  
+  outputDir: 'reports/ui/test-results',
 
   timeout: 60000,
   globalTimeout: 5400000,
@@ -21,8 +23,8 @@ export default defineConfig({
       suiteTitle: true,
       attachments: true,
     }],
-    ['html', { outputFolder: 'reports/ui/html-report' }],  
-    ['json', { outputFile: 'reports/ui/test-results.json' }]  
+    ['html', { outputFolder: 'reports/ui/html-report' }],
+    ['json', { outputFile: 'reports/ui/test-results.json' }]
   ],
 
   use: {
@@ -52,5 +54,6 @@ export default defineConfig({
     },
   ],
 
-  globalSetup: './src/tests/global.setup.ts',
+  // ✅ FIXED: Updated global setup path
+  globalSetup: './src/ui/global.setup.ts',
 });

@@ -1,5 +1,5 @@
 import { FullConfig } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
+import { LoginPage } from './pages/LoginPage';
 import fs from 'fs';
 
 async function globalSetup(config: FullConfig) {
@@ -27,12 +27,13 @@ async function globalSetup(config: FullConfig) {
     try {
         console.log('📝 Logging in as standard_user...');
         
+        // Use LoginPage with the page
         const loginPage = new LoginPage(page);
         
-         //Use full URL directly
-        await page.goto('https://www.saucedemo.com/');
+        // Open the login page (uses the open method which handles navigation)
+        await loginPage.open();
         
-        // Login
+        // Login with valid credentials
         await loginPage.login('standard_user', 'secret_sauce');
         
         // Wait for login to complete

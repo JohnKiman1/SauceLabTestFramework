@@ -1,6 +1,6 @@
-import { test, expect } from '../../../fixtures/customFixtures';
-import { CartPage } from '../../../pages/CartPage';
-import testData from '../../../fixtures/test-data.json';
+import { test, expect } from '../../fixtures/customFixtures';
+import { CartPage } from '../../pages/CartPage';
+import testData from '../../fixtures/test-data.json';
 
 test.describe('Negative - Cart', () => {
     
