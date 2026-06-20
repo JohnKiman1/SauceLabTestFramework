@@ -1,50 +1,176 @@
-# Dependencies
+# Update .gitignore
+cat > .gitignore << 'EOF'
+# ============================================================
+# 📦 DEPENDENCIES
+# ============================================================
 node_modules/
 .pnpm-store/
+.npm/
+.yarn/
+.vscode-test/
 
-# Test results
-reports/
+# Lock files - keep pnpm-lock.yaml for CI/CD
+# package-lock.json
+# pnpm-lock.yaml ✅ KEEP THIS
+
+# ============================================================
+# 📊 TEST RESULTS & REPORTS
+# ============================================================
+# Playwright
 test-results/
 playwright-report/
+reports/ui/
+reports/coverage/
+
+# Allure
 allure-results/
 allure-report/
 
-# Environment files
+# K6 Load Tests
+reports/load/
+*.json
+*.html
+
+# Test artifacts
+*.log
+*.tmp
+*.cache
+
+# ============================================================
+# 🔐 ENVIRONMENT & SECRETS
+# ============================================================
 .env
 .env.local
 .env.*.local
+.env.production
+.env.staging
+.env.development
+*.secret
+*.key
+*.pem
+*.crt
 
-# Logs
+# ============================================================
+# 📝 LOGS
+# ============================================================
 logs/
 *.log
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# OS files
+# ============================================================
+# 🖥️ OPERATING SYSTEM
+# ============================================================
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
 
-# IDE files
+# ============================================================
+# 💻 IDE & EDITOR
+# ============================================================
+# VS Code
 .vscode/
+.vscode-test/
+*.code-workspace
+*.code-snippets
+
+# IntelliJ / WebStorm
 .idea/
+*.iml
+*.ipr
+*.iws
+out/
+.idea_modules/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+.*.swp
+.*.swo
+
+# Emacs
+*~
+
+# ============================================================
+# 📦 BUILD & DISTRIBUTION
+# ============================================================
+dist/
+build/
+out/
+lib/
+*.tsbuildinfo
+*.js.map
+*.d.ts.map
+
+# ============================================================
+# 🖼️ SCREENSHOTS & MEDIA
+# ============================================================
+screenshots/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.mp4
+*.webm
+
+# ============================================================
+# 📊 COVERAGE
+# ============================================================
+coverage/
+.nyc_output/
+*.lcov
+*.lcov.info
+htmlcov/
+
+# ============================================================
+# 🔐 AUTH & SESSION
+# ============================================================
+reports/auth/
+storage/
+*.session
+*.cookies
+*.token
+
+# ============================================================
+# 🗃️ TEMPORARY FILES
+# ============================================================
+tmp/
+temp/
+*.tmp
+*.cache
 *.swp
 *.swo
 *~
 
-# Build files
-dist/
-build/
-*.tsbuildinfo
+# ============================================================
+# 🧪 OTHER
+# ============================================================
+# Docker
+*.dockerignore
+docker-compose.override.yml
 
-# Screenshots
-screenshots/
+# Archives
+*.zip
+*.tar.gz
+*.rar
+*.7z
 
-# Coverage
-coverage/
-.nyc_output/
-
-# Auth files (contains session data)
-reports/auth/
-
-# Temporary files
-tmp/
-temp/
+# Debug
+*.pid
+*.seed
+*.pid.lock
+EOF

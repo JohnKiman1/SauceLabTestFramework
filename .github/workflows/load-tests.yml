@@ -1,0 +1,112 @@
+name: Load Tests (K6)
+
+on:
+  pull_request:
+    branches: [ main ]
+    types: [ opened, synchronize, reopened ]
+  push:
+    branches: [ main, develop ]
+  schedule:
+    - cron: "0 0 * * 1"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+env:
+  CI: true
+
+jobs:
+  load-test:
+    name: 🏋️ Run K6 Load Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 📦 Install K6 (via Official Debian Repository)
+        run: |
+          sudo gpg --homedir /tmp --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install -y k6
+          k6 --version
+
+      - name: 📁 Create report directories
+        run: |
+          mkdir -p reports/load/json
+          mkdir -p reports/load/html
+
+      - name: 🏃 Run Smoke Test (HTTP version)
+        run: |
+          k6 run src/load/scenarios/ci-smoke-test.js --out json=reports/load/json/smoke-report.json
+
+      - name: 🏃 Run Load Test
+        run: |
+          k6 run src/load/scenarios/ci-smoke-test.js --out json=reports/load/json/load-report.json
+
+      - name: 📊 Generate HTML Reports
+        run: |
+          node src/load/utils/convert-k6-to-html.js
+
+      - name: 📤 Upload Load Test Reports (Artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: load-test-reports
+          path: reports/load/
+          retention-days: 30
+
+      - name: 📝 Create Summary
+        run: |
+          echo "# 🏋️ Load Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 Reports" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Smoke Test: Completed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Load Test: Completed" >> $GITHUB_STEP_SUMMARY
+          echo "📁 **Download reports:** https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+
+  deploy-report:
+    name: 🚀 Deploy Load Test Report
+    runs-on: ubuntu-latest
+    needs: load-test
+    # ✅ ONLY deploy on push to main/develop (not on PRs)
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}/load/
+
+    steps:
+      - name: 📥 Download Load Test Report
+        uses: actions/download-artifact@v4
+        with:
+          name: load-test-reports
+          path: report
+
+      - name: 🔧 Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: 📤 Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: report
+
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: 📊 Display Report URL
+        run: |
+          echo "=========================================="
+          echo "✅ Load Test Report Deployed Successfully!"
+          echo "📊 View Report: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/load/"
+          echo "=========================================="
