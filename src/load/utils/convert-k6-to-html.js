@@ -32,30 +32,25 @@ const fileContent = fs.readFileSync(jsonPath, 'utf8');
 const lines = fileContent.split('\n').filter(line => line.trim() !== '');
 
 let metrics = {};
-let thresholds = {};
 
 for (const line of lines) {
   try {
     const data = JSON.parse(line);
     if (data.type === 'Metric' && data.metric) {
-      // Store metric definition
       metrics[data.metric] = data;
     } else if (data.type === 'Point' && data.metric) {
-      // Store metric values
       if (!metrics[data.metric]) {
         metrics[data.metric] = { values: {} };
       }
       if (!metrics[data.metric].values) {
         metrics[data.metric].values = {};
       }
-      // Handle different value types
       if (typeof data.data.value === 'number') {
         if (!metrics[data.metric].values.count) {
           metrics[data.metric].values.count = 0;
         }
         metrics[data.metric].values.count += data.data.value;
       }
-      // Store the latest value for aggregates
       metrics[data.metric].values.value = data.data.value;
     }
   } catch (e) {
@@ -103,8 +98,8 @@ function getMetricP95(name, metrics) {
 // Generate HTML
 const htmlContent = generateHTML(completeMetrics, latestJsonFile);
 
-// Write HTML file
-const htmlPath = path.join(htmlDir, 'report.html');
+// ✅ FIX: Write as index.html instead of report.html
+const htmlPath = path.join(htmlDir, 'index.html');
 fs.writeFileSync(htmlPath, htmlContent);
 
 console.log(`✅ HTML report generated: ${htmlPath}`);
