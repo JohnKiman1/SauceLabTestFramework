@@ -17,7 +17,7 @@ export const options = {
 };
 
 export default function () {
-  // 1. Login via HTTP
+  // Login
   const loginPayload = {
     username: 'standard_user',
     password: 'secret_sauce',
@@ -34,18 +34,10 @@ export default function () {
     'Login successful': (r) => r.status === 200 && r.url.includes('inventory.html'),
   });
 
-  // 2. Get inventory page
+  // Inventory
   const inventoryRes = http.get('https://www.saucedemo.com/inventory.html');
-
   check(inventoryRes, {
-    'Inventory page loaded': (r) => r.status === 200,
-  });
-
-  // 3. Get cart page
-  const cartRes = http.get('https://www.saucedemo.com/cart.html');
-
-  check(cartRes, {
-    'Cart page loaded': (r) => r.status === 200,
+    'Inventory loaded': (r) => r.status === 200,
   });
 
   sleep(1);

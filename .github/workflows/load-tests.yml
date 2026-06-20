@@ -7,7 +7,7 @@ on:
   push:
     branches: [ main, develop ]
   schedule:
-    - cron: "0 0 * * 1"
+    - cron: "0 0 * * 1"  # ✅ Every Monday at 12:00 AM UTC
 
 permissions:
   contents: write
@@ -32,10 +32,12 @@ jobs:
         with:
           node-version: 22
 
-      - name: 📦 Install K6
+      - name: 📦 Install K6 (Latest)
         run: |
-          # Use the official K6 installer script
-          curl -s https://k6.io/install.sh | sudo bash
+          # Download and install K6 from GitHub releases
+          curl -L -o k6.tar.gz https://github.com/grafana/k6/releases/latest/download/k6-linux-amd64.tar.gz
+          tar -xzf k6.tar.gz
+          sudo mv k6-linux-amd64/k6 /usr/local/bin/k6
           k6 --version
 
       - name: 📁 Create report directories
@@ -43,7 +45,7 @@ jobs:
           mkdir -p reports/load/json
           mkdir -p reports/load/html
 
-      - name: 🏃 Run CI Smoke Test (HTTP)
+      - name: 🏃 Run Smoke Test (HTTP version)
         run: |
           k6 run src/load/scenarios/ci-smoke-test.js --out json=reports/load/json/smoke-report.json
 
@@ -64,6 +66,5 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## 📊 Reports" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "✅ CI Smoke Test: Completed" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Smoke Test: Completed" >> $GITHUB_STEP_SUMMARY
           echo "📁 **Download reports:** https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
