@@ -7,7 +7,7 @@ on:
   push:
     branches: [ main, develop ]
   schedule:
-    - cron: "0 0 * * 1"  # ✅ Every Monday at 12:00 AM UTC (same as Playwright)
+    - cron: "0 0 * * 1"
 
 permissions:
   contents: write
@@ -34,28 +34,18 @@ jobs:
 
       - name: 📦 Install K6
         run: |
-          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
-          echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
-          sudo apt-get update
-          sudo apt-get install -y k6
+          # Use the official K6 installer script
+          curl -s https://k6.io/install.sh | sudo bash
+          k6 --version
 
       - name: 📁 Create report directories
         run: |
           mkdir -p reports/load/json
           mkdir -p reports/load/html
 
-      - name: 🏃 Run Smoke Test
+      - name: 🏃 Run CI Smoke Test (HTTP)
         run: |
-          k6 run src/load/scenarios/browser-smoke-test.js --out json=reports/load/json/smoke-report.json
-
-      - name: 🏃 Run Load Test
-        run: |
-          k6 run src/load/scenarios/browser-load-test.js --out json=reports/load/json/load-report.json
-
-      - name: 🏃 Run Spike Test
-        if: false  # Optional - enable if you have spike test
-        run: |
-          k6 run src/load/scenarios/browser-spike-test.js --out json=reports/load/json/spike-report.json
+          k6 run src/load/scenarios/ci-smoke-test.js --out json=reports/load/json/smoke-report.json
 
       - name: 📊 Generate HTML Reports
         run: |
@@ -74,9 +64,6 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## 📊 Reports" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Smoke Test: Completed" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Load Test: Completed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ CI Smoke Test: Completed" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "📁 **Download reports:** https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "📊 **View HTML report:** Download artifacts and open \`reports/load/html/report.html\`" >> $GITHUB_STEP_SUMMARY

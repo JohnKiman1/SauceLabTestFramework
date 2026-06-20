@@ -6,8 +6,8 @@
  * Duration: ~30 seconds
  */
 
-import { browser } from 'k6/browser';  // ✅ Updated import
-import { check } from 'https://jslib.k6.io/k6-utils/1.5.0/index.js';  // ✅ Updated check import
+import { browser } from 'k6/browser';
+import { check } from 'https://jslib.k6.io/k6-utils/1.5.0/index.js';
 
 export const options = {
   scenarios: {
@@ -16,6 +16,8 @@ export const options = {
       options: {
         browser: {
           type: 'chromium',
+          // ✅ Fix: Disable GPU acceleration in CI
+          args: ['--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage'],
         },
       },
       vus: 1,
@@ -25,32 +27,35 @@ export const options = {
   },
 };
 
-export default async function () {  // ✅ Added async
-  const context = await browser.newContext();  // ✅ Added await
-  const page = await context.newPage();  // ✅ Added await
+export default async function () {
+  const context = await browser.newContext({
+    // ✅ Fix: Add viewport and other options
+    viewport: { width: 1280, height: 720 },
+  });
+  const page = await context.newPage();
   
   try {
     console.log('🔐 Navigating to SauceDemo...');
-    await page.goto('https://www.saucedemo.com/');  // ✅ Added await
+    await page.goto('https://www.saucedemo.com/');
     
     // Wait for page to load
-    await page.waitForSelector('[data-test="username"]');  // ✅ Added await
+    await page.waitForSelector('[data-test="username"]');
     
     // Fill login form
-    await page.locator('[data-test="username"]').fill('standard_user');  // ✅ Added await
-    await page.locator('[data-test="password"]').fill('secret_sauce');  // ✅ Added await
+    await page.locator('[data-test="username"]').fill('standard_user');
+    await page.locator('[data-test="password"]').fill('secret_sauce');
     
     // Click login
-    await page.locator('[data-test="login-button"]').click();  // ✅ Added await
+    await page.locator('[data-test="login-button"]').click();
     
     // Wait for inventory page
-    await page.waitForSelector('[data-test="inventory-container"]', {  // ✅ Added await
+    await page.waitForSelector('[data-test="inventory-container"]', {
       timeout: '10s',
     });
     
     // Verify login success
-    const isLoggedIn = await page.url().includes('inventory.html');  // ✅ Added await
-    await check(isLoggedIn, {  // ✅ Updated check usage
+    const isLoggedIn = await page.url().includes('inventory.html');
+    await check(isLoggedIn, {
       '✅ Logged in successfully': (is) => is === true,
     });
     
@@ -59,8 +64,8 @@ export default async function () {  // ✅ Added async
   } catch (error) {
     console.error(`❌ Test failed: ${error}`);
   } finally {
-    await page.close();  // ✅ Added await
-    await context.close();  // ✅ Added await
+    await page.close();
+    await context.close();
   }
 }
 
