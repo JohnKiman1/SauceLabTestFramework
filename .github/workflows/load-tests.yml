@@ -78,12 +78,11 @@ jobs:
     name: 🚀 Deploy Load Test Report
     runs-on: ubuntu-latest
     needs: load-test
-    # ✅ ONLY deploy on push to main/develop (not on PRs)
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
 
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}/load/
+      url: ${{ steps.deployment.outputs.page_url }}load/
 
     steps:
       - name: 📥 Download Load Test Report
@@ -92,13 +91,24 @@ jobs:
           name: load-test-reports
           path: report
 
+      - name: 📋 Check report contents
+        run: |
+          echo "📁 Report contents:"
+          ls -la report/
+          echo ""
+          echo "📁 HTML folder contents:"
+          ls -la report/html/ || echo "No html folder!"
+          echo ""
+          echo "📁 Full path:"
+          find report -type f
+
       - name: 🔧 Setup Pages
         uses: actions/configure-pages@v5
 
       - name: 📤 Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: report
+          path: report/html
 
       - name: 🚀 Deploy to GitHub Pages
         id: deployment
