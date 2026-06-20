@@ -45,7 +45,7 @@ jobs:
           mkdir -p reports/load/json
           mkdir -p reports/load/html
 
-      - name: 🏃 Run Smoke Test (HTTP version)
+      - name: 🏃 Run Smoke Test
         run: |
           k6 run src/load/scenarios/ci-smoke-test.js --out json=reports/load/json/smoke-report.json
 
@@ -105,6 +105,13 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add load/
-          git diff --staged --quiet || git commit -m "chore: Update load test report [skip ci]"
-          git push origin main
+          git add -f load/
+          git status
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: Update load test report [skip ci]"
+            git push origin main
+          else
+            echo "✅ No changes to commit"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
